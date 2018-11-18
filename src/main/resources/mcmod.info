@@ -1,0 +1,15 @@
+[
+{
+  "modid": "mymod",
+  "name": "My Mod",
+  "description": "My Fancy Mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["McJty"],
+  "credits": "McJty",
+  "logoFile": "",
+  "screenshots": []
+}
+]

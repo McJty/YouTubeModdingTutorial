@@ -28,7 +28,9 @@ public class TileFastFurnace extends TileEntity implements ITickable {
     public static final int RF_PER_TICK = 20;
 
     private int progress = 0;
+
     private int clientProgress = -1;
+    private int clientEnergy = -1;
 
     @Override
     public void update() {
@@ -102,6 +104,18 @@ public class TileFastFurnace extends TileEntity implements ITickable {
 
     public void setClientProgress(int clientProgress) {
         this.clientProgress = clientProgress;
+    }
+
+    public int getClientEnergy() {
+        return clientEnergy;
+    }
+
+    public void setClientEnergy(int clientEnergy) {
+        this.clientEnergy = clientEnergy;
+    }
+
+    public int getEnergy() {
+        return energyStorage.getEnergyStored();
     }
 
     // ----------------------------------------------------------------------------------------

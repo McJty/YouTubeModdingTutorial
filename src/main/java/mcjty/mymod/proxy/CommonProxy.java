@@ -1,10 +1,13 @@
 package mcjty.mymod.proxy;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.ModBlocks;
 import mcjty.mymod.MyMod;
 import mcjty.mymod.furnace.BlockFastFurnace;
 import mcjty.mymod.furnace.TileFastFurnace;
+import mcjty.mymod.network.Messages;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.event.RegistryEvent;
@@ -19,6 +22,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @Mod.EventBusSubscriber
 public class CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
+        Messages.registerMessages("mymod");
     }
 
     public void init(FMLInitializationEvent e) {
@@ -37,5 +41,13 @@ public class CommonProxy {
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().register(new ItemBlock(ModBlocks.blockFastFurnace).setRegistryName(BlockFastFurnace.FAST_FURNACE));
+    }
+
+    public ListenableFuture<Object> addScheduledTaskClient(Runnable runnableToSchedule) {
+        throw new IllegalStateException("This should only be called from client side");
+    }
+
+    public EntityPlayer getClientPlayer() {
+        throw new IllegalStateException("This should only be called from client side");
     }
 }

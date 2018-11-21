@@ -1,6 +1,10 @@
 package mcjty.mymod.furnace;
 
+import mcjty.mymod.network.Messages;
+import mcjty.mymod.network.PacketSyncPower;
+import mcjty.mymod.tools.IEnergyContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -10,7 +14,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class ContainerFastFurnace extends Container {
+public class ContainerFastFurnace extends Container implements IEnergyContainer {
 
     private TileFastFurnace te;
 
@@ -101,6 +105,15 @@ public class ContainerFastFurnace extends Container {
                 listener.sendWindowProperty(this, PROGRESS_ID, te.getProgress());
             }
         }
+        if (te.getEnergy() != te.getClientEnergy()) {
+            te.setClientEnergy(te.getEnergy());
+            for (IContainerListener listener : listeners) {
+                if (listener instanceof EntityPlayerMP) {
+                    EntityPlayerMP player = (EntityPlayerMP) listener;
+                    Messages.INSTANCE.sendTo(new PacketSyncPower(te.getEnergy()), player);
+                }
+            }
+        }
     }
 
     @Override
@@ -108,5 +121,10 @@ public class ContainerFastFurnace extends Container {
         if (id == PROGRESS_ID) {
             te.setClientProgress(data);
         }
+    }
+
+    @Override
+    public void syncPower(int energy) {
+        te.setClientEnergy(energy);
     }
 }

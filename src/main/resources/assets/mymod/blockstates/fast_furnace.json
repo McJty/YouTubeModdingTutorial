@@ -21,6 +21,11 @@
       "east": {"y": 90},
       "up": {"x": -90},
       "down": {"x": 90}
+    },
+    "state": {
+      "off": {},
+      "working": { "textures": { "north": "mymod:blocks/fast_furnace_working" } },
+      "nopower": {"textures": { "north": "mymod:blocks/fast_furnace_nopower" } }
     }
   }
 }

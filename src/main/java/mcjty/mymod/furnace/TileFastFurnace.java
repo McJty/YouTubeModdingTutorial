@@ -23,7 +23,7 @@ public class TileFastFurnace extends TileEntity implements ITickable {
     public static final int MAX_PROGRESS = 40;
 
     private int progress = 0;
-
+    private int clientProgress = -1;
 
     @Override
     public void update() {
@@ -83,6 +83,14 @@ public class TileFastFurnace extends TileEntity implements ITickable {
 
     public void setProgress(int progress) {
         this.progress = progress;
+    }
+
+    public int getClientProgress() {
+        return clientProgress;
+    }
+
+    public void setClientProgress(int clientProgress) {
+        this.clientProgress = clientProgress;
     }
 
     // This item handler will hold our three input slots

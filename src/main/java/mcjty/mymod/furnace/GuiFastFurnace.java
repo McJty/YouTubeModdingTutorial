@@ -26,8 +26,8 @@ public class GuiFastFurnace extends GuiContainer {
         mc.getTextureManager().bindTexture(background);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-        if (furnace.getProgress() > 0) {
-            int percentage = 100 - furnace.getProgress() * 100 / TileFastFurnace.MAX_PROGRESS;
+        if (furnace.getClientProgress() > 0) {
+            int percentage = 100 - furnace.getClientProgress() * 100 / TileFastFurnace.MAX_PROGRESS;
             drawString(mc.fontRenderer, "Progress: " + percentage + "%", guiLeft + 10, guiTop + 50, 0xffffff);
         }
     }

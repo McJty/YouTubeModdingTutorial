@@ -1,4 +1,10 @@
+#PARSE_ESCAPES
+
 tile.mymod.fast_furnace.name=Fast Furnace
 
 itemGroup.mymod=My Mod
 
+message.mymod.fast_furnace=\
+    @aEnergy: %d\n\
+    @aItems: %d -> %d\n\
+    @fFast furnace

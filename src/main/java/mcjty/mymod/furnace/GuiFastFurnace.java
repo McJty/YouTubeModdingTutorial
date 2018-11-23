@@ -1,6 +1,7 @@
 package mcjty.mymod.furnace;
 
 import mcjty.mymod.MyMod;
+import mcjty.mymod.config.FastFurnaceConfig;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
@@ -32,7 +33,7 @@ public class GuiFastFurnace extends GuiContainer {
         drawEnergyBar(energy);
 
         if (furnace.getClientProgress() > 0) {
-            int percentage = 100 - furnace.getClientProgress() * 100 / TileFastFurnace.MAX_PROGRESS;
+            int percentage = 100 - furnace.getClientProgress() * 100 / FastFurnaceConfig.MAX_PROGRESS;
             drawString(mc.fontRenderer, "Progress: " + percentage + "%", guiLeft + 10, guiTop + 50, 0xffffff);
         }
     }
@@ -50,7 +51,7 @@ public class GuiFastFurnace extends GuiContainer {
 
     private void drawEnergyBar(int energy) {
         drawRect(guiLeft + 10, guiTop + 5, guiLeft + 112, guiTop + 15, 0xff555555);
-        int percentage = energy * 100 / TileFastFurnace.MAX_POWER;
+        int percentage = energy * 100 / FastFurnaceConfig.MAX_POWER;
         for (int i = 0 ; i < percentage ; i++) {
             drawVerticalLine(guiLeft + 10 + 1 + i, guiTop + 5, guiTop + 14, i % 2 == 0 ? 0xffff0000 : 0xff000000);
         }

@@ -1,5 +1,6 @@
 package mcjty.mymod.furnace;
 
+import mcjty.mymod.config.FastFurnaceConfig;
 import mcjty.mymod.tools.MyEnergyStorage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,11 +27,6 @@ public class TileFastFurnace extends TileEntity implements ITickable {
     public static final int OUTPUT_SLOTS = 3;
     public static final int SIZE = INPUT_SLOTS + OUTPUT_SLOTS;
 
-    public static final int MAX_PROGRESS = 40;
-    public static final int MAX_POWER = 100000;
-    public static final int RF_PER_TICK_INPUT = 100;
-    public static final int RF_PER_TICK = 20;
-
     private int progress = 0;
     private FurnaceState state = FurnaceState.OFF;
 
@@ -41,14 +37,14 @@ public class TileFastFurnace extends TileEntity implements ITickable {
     public void update() {
         if (!world.isRemote) {
 
-            if (energyStorage.getEnergyStored() < RF_PER_TICK) {
+            if (energyStorage.getEnergyStored() < FastFurnaceConfig.RF_PER_TICK) {
                 setState(FurnaceState.NOPOWER);
                 return;
             }
 
             if (progress > 0) {
                 setState(FurnaceState.WORKING);
-                energyStorage.consumePower(RF_PER_TICK);
+                energyStorage.consumePower(FastFurnaceConfig.RF_PER_TICK);
                 progress--;
                 if (progress <= 0) {
                     attemptSmelt();
@@ -77,7 +73,7 @@ public class TileFastFurnace extends TileEntity implements ITickable {
             ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inputHandler.getStackInSlot(i));
             if (!result.isEmpty()) {
                 if (insertOutput(result.copy(), true)) {
-                    progress = MAX_PROGRESS;
+                    progress = FastFurnaceConfig.MAX_PROGRESS;
                     markDirty();
                 }
                 break;
@@ -198,7 +194,7 @@ public class TileFastFurnace extends TileEntity implements ITickable {
 
     // ----------------------------------------------------------------------------------------
 
-    private MyEnergyStorage energyStorage = new MyEnergyStorage(MAX_POWER, RF_PER_TICK_INPUT);
+    private MyEnergyStorage energyStorage = new MyEnergyStorage(FastFurnaceConfig.MAX_POWER, FastFurnaceConfig.RF_PER_TICK_INPUT);
 
     // ----------------------------------------------------------------------------------------
 

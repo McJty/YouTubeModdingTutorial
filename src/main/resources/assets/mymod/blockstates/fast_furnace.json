@@ -3,6 +3,7 @@
   "defaults": {
     "model": "cube",
     "textures": {
+      "particle": "mymod:blocks/fast_furnace",
       "north": "mymod:blocks/fast_furnace",
       "south": "mymod:blocks/side",
       "west": "mymod:blocks/side",

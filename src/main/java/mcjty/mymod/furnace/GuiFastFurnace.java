@@ -33,7 +33,7 @@ public class GuiFastFurnace extends GuiContainer {
         drawEnergyBar(energy);
 
         if (furnace.getClientProgress() > 0) {
-            int percentage = 100 - furnace.getClientProgress() * 100 / FastFurnaceConfig.MAX_PROGRESS;
+            int percentage = furnace.getClientProgress();
             drawString(mc.fontRenderer, "Progress: " + percentage + "%", guiLeft + 10, guiTop + 50, 0xffffff);
         }
     }

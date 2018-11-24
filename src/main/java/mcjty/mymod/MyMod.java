@@ -23,7 +23,7 @@ public class MyMod {
 
     public static CreativeTabs creativeTab = new CreativeTabs("mymod") {
         @Override
-        public ItemStack getTabIconItem() {
+        public ItemStack createIcon() {
             return new ItemStack(ModBlocks.blockFastFurnace);
         }
     };

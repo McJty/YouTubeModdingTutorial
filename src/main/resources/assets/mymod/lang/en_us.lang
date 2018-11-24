@@ -3,6 +3,8 @@
 tile.mymod.fast_furnace.name=Fast Furnace
 tile.mymod.fancy_ore.name=Fancy Ore
 
+item.mymod.fancy_ingot.name=Fancy Ingot
+
 itemGroup.mymod=My Mod
 
 message.mymod.fast_furnace=\

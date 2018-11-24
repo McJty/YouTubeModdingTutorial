@@ -2,9 +2,11 @@ package mcjty.mymod.proxy;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.ModBlocks;
+import mcjty.mymod.ModItems;
 import mcjty.mymod.MyMod;
 import mcjty.mymod.furnace.BlockFastFurnace;
 import mcjty.mymod.furnace.TileFastFurnace;
+import mcjty.mymod.items.ItemFancyIngot;
 import mcjty.mymod.network.Messages;
 import mcjty.mymod.worldgen.BlockFancyOre;
 import mcjty.mymod.worldgen.OreGenerator;
@@ -13,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,6 +25,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
@@ -37,6 +41,8 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent e) {
+        GameRegistry.addSmelting(ModBlocks.blockFancyOre, new ItemStack(ModItems.itemFancyIngot, 1), 0.5f);
+        OreDictionary.registerOre("oreFancy", ModBlocks.blockFancyOre);
     }
 
     @SubscribeEvent
@@ -58,6 +64,7 @@ public class CommonProxy {
                 }
                         .setHasSubtypes(true)
                         .setRegistryName(BlockFancyOre.FANCY_ORE));
+        event.getRegistry().register(new ItemFancyIngot());
     }
 
     public ListenableFuture<Object> addScheduledTaskClient(Runnable runnableToSchedule) {

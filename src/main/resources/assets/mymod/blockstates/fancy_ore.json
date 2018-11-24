@@ -1,0 +1,12 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "oretype": {
+      "overworld": { "model": "cube_all", "textures": { "all": "mymod:blocks/fancy_ore_overworld" } },
+      "nether": { "model": "cube_all", "textures": { "all": "mymod:blocks/fancy_ore_nether" } },
+      "end": { "model": "cube_all", "textures": { "all": "mymod:blocks/fancy_ore_end" } }
+    }
+  }
+}

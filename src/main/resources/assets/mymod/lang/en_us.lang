@@ -1,6 +1,7 @@
 #PARSE_ESCAPES
 
 tile.mymod.fast_furnace.name=Fast Furnace
+tile.mymod.fancy_ore.name=Fancy Ore
 
 itemGroup.mymod=My Mod
 

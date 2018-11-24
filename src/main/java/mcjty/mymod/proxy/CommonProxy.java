@@ -7,10 +7,13 @@ import mcjty.mymod.furnace.BlockFastFurnace;
 import mcjty.mymod.furnace.TileFastFurnace;
 import mcjty.mymod.network.Messages;
 import mcjty.mymod.worldgen.BlockFancyOre;
+import mcjty.mymod.worldgen.OreGenerator;
+import mcjty.mymod.worldgen.WorldTickHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -24,10 +27,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
         Messages.registerMessages("mymod");
+        GameRegistry.registerWorldGenerator(OreGenerator.instance, 5);
+        MinecraftForge.EVENT_BUS.register(OreGenerator.instance);
     }
 
     public void init(FMLInitializationEvent e) {
         NetworkRegistry.INSTANCE.registerGuiHandler(MyMod.instance, new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
     }
 
     public void postInit(FMLPostInitializationEvent e) {

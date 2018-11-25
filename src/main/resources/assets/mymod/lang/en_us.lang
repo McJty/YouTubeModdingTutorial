@@ -1,6 +1,7 @@
 #PARSE_ESCAPES
 
 tile.mymod.fast_furnace.name=Fast Furnace
+tile.mymod.generator.name=Generator
 tile.mymod.fancy_ore.name=Fancy Ore
 
 item.mymod.fancy_ingot.name=Fancy Ingot
@@ -11,3 +12,7 @@ message.mymod.fast_furnace=\
     @aEnergy: %d\n\
     @aItems: %d -> %d\n\
     @fFast furnace
+
+message.mymod.generator=\
+    @aEnergy: %d\n\
+    @fPower Generator

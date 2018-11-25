@@ -4,17 +4,12 @@ import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.ModBlocks;
 import mcjty.mymod.ModItems;
 import mcjty.mymod.MyMod;
-import mcjty.mymod.furnace.BlockFastFurnace;
-import mcjty.mymod.furnace.TileFastFurnace;
-import mcjty.mymod.items.ItemFancyIngot;
 import mcjty.mymod.network.Messages;
-import mcjty.mymod.worldgen.BlockFancyOre;
 import mcjty.mymod.worldgen.OreGenerator;
 import mcjty.mymod.worldgen.WorldTickHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -47,24 +42,12 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(new BlockFastFurnace());
-        GameRegistry.registerTileEntity(TileFastFurnace.class, MyMod.MODID + "_fast_furnace");
-        event.getRegistry().register(new BlockFancyOre());
+        ModBlocks.register(event.getRegistry());
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(new ItemBlock(ModBlocks.blockFastFurnace).setRegistryName(BlockFastFurnace.FAST_FURNACE));
-        event.getRegistry().register(
-                new ItemBlock(ModBlocks.blockFancyOre) {
-                    @Override
-                    public int getMetadata(int damage) {
-                        return damage;
-                    }
-                }
-                        .setHasSubtypes(true)
-                        .setRegistryName(BlockFancyOre.FANCY_ORE));
-        event.getRegistry().register(new ItemFancyIngot());
+        ModItems.register(event.getRegistry());
     }
 
     public ListenableFuture<Object> addScheduledTaskClient(Runnable runnableToSchedule) {

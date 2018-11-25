@@ -1,9 +1,13 @@
 package mcjty.mymod.furnace;
 
 import mcjty.mymod.config.FastFurnaceConfig;
+import mcjty.mymod.tools.IGuiTile;
+import mcjty.mymod.tools.IRestorableTileEntity;
 import mcjty.mymod.tools.MyEnergyStorage;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,7 +25,7 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileFastFurnace extends TileEntity implements ITickable {
+public class TileFastFurnace extends TileEntity implements ITickable, IRestorableTileEntity, IGuiTile {
 
     public static final int INPUT_SLOTS = 3;
     public static final int OUTPUT_SLOTS = 3;
@@ -206,6 +210,7 @@ public class TileFastFurnace extends TileEntity implements ITickable {
         state = FurnaceState.VALUES[compound.getInteger("state")];
     }
 
+    @Override
     public void readRestorableFromNBT(NBTTagCompound compound) {
         if (compound.hasKey("itemsIn")) {
             inputHandler.deserializeNBT((NBTTagCompound) compound.getTag("itemsIn"));
@@ -225,6 +230,7 @@ public class TileFastFurnace extends TileEntity implements ITickable {
         return compound;
     }
 
+    @Override
     public void writeRestorableToNBT(NBTTagCompound compound) {
         compound.setTag("itemsIn", inputHandler.serializeNBT());
         compound.setTag("itemsOut", outputHandler.serializeNBT());
@@ -235,6 +241,16 @@ public class TileFastFurnace extends TileEntity implements ITickable {
     public boolean canInteractWith(EntityPlayer playerIn) {
         // If we are too far away from this tile entity you cannot use it
         return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
+    }
+
+    @Override
+    public Container createContainer(EntityPlayer player) {
+        return new ContainerFastFurnace(player.inventory, this);
+    }
+
+    @Override
+    public GuiContainer createGui(EntityPlayer player) {
+        return new GuiFastFurnace(this, new ContainerFastFurnace(player.inventory, this));
     }
 
     @Override

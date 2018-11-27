@@ -2,7 +2,8 @@
   "forge_marker": 1,
   "defaults": {
     "custom": { "flip-v": true },
-    "model": "mymod:generator.obj"
+    "model": "mymod:generator.obj",
+    "transform": "forge:default-block"
   },
   "variants": {
     "normal": [{}],

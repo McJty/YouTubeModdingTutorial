@@ -1,13 +1,21 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "custom": { "flip-v": true },
-    "model": "mymod:generator.obj",
+    "model": "mymod:generator",
     "transform": "forge:default-block"
   },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
+    "normal": [{
+    }],
+    "inventory": [{
+      "submodel": { "p": { "custom": { "flip-v": true }, "model": "mymod:generator_obj.obj" } }
+    }],
+    "static": {
+      "true": {},
+      "false": {
+        "submodel": { "p": { "custom": { "flip-v": true }, "model": "mymod:generator_obj.obj" } }
+      }
+    },
     "facing": {
       "north": {},
       "south": {"y": 180},

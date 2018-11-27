@@ -1,5 +1,6 @@
 package mcjty.mymod.proxy;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.ModBlocks;
 import mcjty.mymod.ModItems;
@@ -11,7 +12,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.animation.ITimeValue;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -21,6 +25,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+
+import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
@@ -49,6 +55,12 @@ public class CommonProxy {
     public static void registerItems(RegistryEvent.Register<Item> event) {
         ModItems.register(event.getRegistry());
     }
+
+    @Nullable
+    public IAnimationStateMachine load(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {
+        return null;
+    }
+
 
     public ListenableFuture<Object> addScheduledTaskClient(Runnable runnableToSchedule) {
         throw new IllegalStateException("This should only be called from client side");

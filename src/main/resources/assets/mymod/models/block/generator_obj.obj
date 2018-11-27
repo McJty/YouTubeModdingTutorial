@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'generator.blend'
 # www.blender.org
-mtllib generator.mtl
+mtllib generator_obj.mtl
 o Cube_Cube.002
 v 0.500000 1.000000 0.500000
 v 1.000000 0.000000 0.000000

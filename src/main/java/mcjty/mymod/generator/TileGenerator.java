@@ -1,5 +1,7 @@
 package mcjty.mymod.generator;
 
+import com.google.common.collect.ImmutableMap;
+import mcjty.mymod.MyMod;
 import mcjty.mymod.config.GeneratorConfig;
 import mcjty.mymod.tools.IGuiTile;
 import mcjty.mymod.tools.IRestorableTileEntity;
@@ -11,8 +13,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.model.animation.CapabilityAnimation;
+import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.energy.CapabilityEnergy;
+
+import javax.annotation.Nullable;
 
 public class TileGenerator extends TileEntity implements ITickable, IRestorableTileEntity, IGuiTile {
 
@@ -20,6 +27,13 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     public void update() {
         if (!world.isRemote) {
         }
+    }
+
+    @Nullable
+    private final IAnimationStateMachine asm;
+
+    public TileGenerator() {
+        asm = MyMod.proxy.load(new ResourceLocation(MyMod.MODID, "asms/block/generator.json"), ImmutableMap.of());
     }
 
     // ----------------------------------------------------------------------------------------
@@ -70,6 +84,9 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
         if (capability == CapabilityEnergy.ENERGY) {
             return true;
         }
+        if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) {
+            return true;
+        }
         return super.hasCapability(capability, facing);
     }
 
@@ -77,6 +94,9 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
             return CapabilityEnergy.ENERGY.cast(energyStorage);
+        }
+        if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) {
+            return CapabilityAnimation.ANIMATION_CAPABILITY.cast(asm);
         }
         return super.getCapability(capability, facing);
     }

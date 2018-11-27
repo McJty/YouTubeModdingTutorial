@@ -1,0 +1,72 @@
+{
+  "joints": {
+    "cube1": { "0": [ 1.0 ] },
+    "cube2": { "1": [ 1.0 ] },
+    "cube3": { "2": [ 1.0 ] },
+    "cube4": { "3": [ 1.0 ] }
+  },
+  "clips": {
+    "default": {
+      "loop": true,
+      "joint_clips": {
+        "cube1": [
+          {
+            "variable": "axis_y",
+            "type": "uniform",
+            "interpolation": "nearest",
+            "samples": [ 1 ]
+          },
+          {
+            "variable": "angle",
+            "type": "uniform",
+            "interpolation": "linear",
+            "samples": [ 0, 120, 240, 0, 120, 240 ]
+          }
+        ],
+        "cube2": [
+          {
+            "variable": "axis_y",
+            "type": "uniform",
+            "interpolation": "nearest",
+            "samples": [ 1 ]
+          },
+          {
+            "variable": "angle",
+            "type": "uniform",
+            "interpolation": "linear",
+            "samples": [ 0, 120, 240, 0, 120, 240 ]
+          }
+        ],
+        "cube3": [
+          {
+            "variable": "axis_y",
+            "type": "uniform",
+            "interpolation": "nearest",
+            "samples": [ 1 ]
+          },
+          {
+            "variable": "angle",
+            "type": "uniform",
+            "interpolation": "linear",
+            "samples": [ 0, 120, 240, 0, 120, 240 ]
+          }
+        ],
+        "cube4": [
+          {
+            "variable": "axis_y",
+            "type": "uniform",
+            "interpolation": "nearest",
+            "samples": [ 1 ]
+          },
+          {
+            "variable": "angle",
+            "type": "uniform",
+            "interpolation": "linear",
+            "samples": [ 0, 120, 240, 0, 120, 240 ]
+          }
+        ]
+      },
+      "events": {}
+    }
+  }
+}

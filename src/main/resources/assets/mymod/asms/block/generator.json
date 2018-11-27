@@ -1,0 +1,13 @@
+{
+  "parameters": {
+    "cycle": ["/", 2.0]
+  },
+  "clips": {
+    "default": ["apply", "mymod:block/generator@default", "#cycle" ]
+  },
+  "states": [
+    "default"
+  ],
+  "transitions": {},
+  "start_state": "default"
+}

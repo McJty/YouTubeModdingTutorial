@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.ModBlocks;
 import mcjty.mymod.ModItems;
 import mcjty.mymod.MyMod;
+import mcjty.mymod.generator.DamageTracker;
 import mcjty.mymod.network.Messages;
 import mcjty.mymod.worldgen.OreGenerator;
 import mcjty.mymod.worldgen.WorldTickHandler;
@@ -39,6 +40,7 @@ public class CommonProxy {
     public void init(FMLInitializationEvent e) {
         NetworkRegistry.INSTANCE.registerGuiHandler(MyMod.instance, new GuiHandler());
         MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
+        MinecraftForge.EVENT_BUS.register(DamageTracker.instance);
     }
 
     public void postInit(FMLPostInitializationEvent e) {

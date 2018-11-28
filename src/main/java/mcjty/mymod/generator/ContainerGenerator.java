@@ -1,8 +1,12 @@
 package mcjty.mymod.generator;
 
+import mcjty.mymod.network.Messages;
+import mcjty.mymod.network.PacketSyncMachineState;
 import mcjty.mymod.tools.IMachineStateContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 
@@ -22,7 +26,7 @@ public class ContainerGenerator extends Container implements IMachineStateContai
             for (int col = 0; col < 9; ++col) {
                 int x = 10 + col * 18;
                 int y = row * 18 + 70;
-                this.addSlotToContainer(new Slot(playerInventory, col + row * 9 + 10, x, y));
+                this.addSlotToContainer(new Slot(playerInventory, col + row * 9 + 9, x, y));
             }
         }
 
@@ -44,23 +48,20 @@ public class ContainerGenerator extends Container implements IMachineStateContai
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
 
-//        if (te.getProgress() != te.getClientProgress() || te.getEnergy() != te.getClientEnergy()) {
-//            te.setClientEnergy(te.getEnergy());
-//            te.setClientProgress(te.getProgress());
-//
-//            for (IContainerListener listener : listeners) {
-//                if (listener instanceof EntityPlayerMP) {
-//                    EntityPlayerMP player = (EntityPlayerMP) listener;
-//                    int pct = 100 - te.getProgress() * 100 / FastFurnaceConfig.MAX_PROGRESS;
-//                    Messages.INSTANCE.sendTo(new PacketSyncMachineState(te.getEnergy(), pct), player);
-//                }
-//            }
-//        }
+        if (te.getEnergy() != te.getClientEnergy()) {
+            te.setClientEnergy(te.getEnergy());
+
+            for (IContainerListener listener : listeners) {
+                if (listener instanceof EntityPlayerMP) {
+                    EntityPlayerMP player = (EntityPlayerMP) listener;
+                    Messages.INSTANCE.sendTo(new PacketSyncMachineState(te.getEnergy(), 0), player);
+                }
+            }
+        }
     }
 
     @Override
     public void sync(int energy, int progress) {
-//        te.setClientEnergy(energy);
-//        te.setClientProgress(progress);
+        te.setClientEnergy(energy);
     }
 }

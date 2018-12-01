@@ -6,6 +6,8 @@ tile.mymod.fancy_ore.name=Fancy Ore
 
 item.mymod.fancy_ingot.name=Fancy Ingot
 
+entity.mymod_guard.name=Guard
+
 itemGroup.mymod=My Mod
 
 message.mymod.fast_furnace=\

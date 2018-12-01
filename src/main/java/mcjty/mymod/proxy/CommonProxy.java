@@ -3,6 +3,7 @@ package mcjty.mymod.proxy;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.ModBlocks;
+import mcjty.mymod.ModEntities;
 import mcjty.mymod.ModItems;
 import mcjty.mymod.MyMod;
 import mcjty.mymod.generator.DamageTracker;
@@ -31,10 +32,13 @@ import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
+
     public void preInit(FMLPreInitializationEvent e) {
         Messages.registerMessages("mymod");
         GameRegistry.registerWorldGenerator(OreGenerator.instance, 5);
         MinecraftForge.EVENT_BUS.register(OreGenerator.instance);
+
+        ModEntities.init();
     }
 
     public void init(FMLInitializationEvent e) {

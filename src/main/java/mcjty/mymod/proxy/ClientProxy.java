@@ -3,6 +3,7 @@ package mcjty.mymod.proxy;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.ModBlocks;
+import mcjty.mymod.ModEntities;
 import mcjty.mymod.ModItems;
 import mcjty.mymod.MyMod;
 import net.minecraft.client.Minecraft;
@@ -30,6 +31,7 @@ public class ClientProxy extends CommonProxy {
     public static void registerModels(ModelRegistryEvent event) {
         ModBlocks.initModels();
         ModItems.initModels();
+        ModEntities.initModels();
     }
 
     @Override

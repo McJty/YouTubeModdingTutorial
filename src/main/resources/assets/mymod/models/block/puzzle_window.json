@@ -1,0 +1,11 @@
+{
+  "elements": [
+    {
+      "from": [ 1.5, 0, 1.5 ],
+      "to": [ 15, 16, 15 ],
+      "faces": {
+        "north": { "texture": "#overlay", "cullface": "north" }
+      }
+    }
+  ]
+}

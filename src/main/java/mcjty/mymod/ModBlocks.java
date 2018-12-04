@@ -4,6 +4,8 @@ import mcjty.mymod.furnace.BlockFastFurnace;
 import mcjty.mymod.furnace.TileFastFurnace;
 import mcjty.mymod.generator.BlockGenerator;
 import mcjty.mymod.generator.TileGenerator;
+import mcjty.mymod.puzzle.BlockPuzzle;
+import mcjty.mymod.puzzle.TilePuzzle;
 import mcjty.mymod.worldgen.BlockFancyOre;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -22,12 +24,16 @@ public class ModBlocks {
     @GameRegistry.ObjectHolder("mymod:fancy_ore")
     public static BlockFancyOre blockFancyOre;
 
+    @GameRegistry.ObjectHolder("mymod:puzzle")
+    public static BlockPuzzle blockPuzzle;
+
 
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         blockFastFurnace.initModel();
         blockGenerator.initModel();
         blockFancyOre.initModel();
+        blockPuzzle.initModel();
     }
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -36,6 +42,9 @@ public class ModBlocks {
 
         registry.register(new BlockGenerator());
         GameRegistry.registerTileEntity(TileGenerator.class, MyMod.MODID + "_generator");
+
+        registry.register(new BlockPuzzle());
+        GameRegistry.registerTileEntity(TilePuzzle.class, MyMod.MODID + "_puzzle");
 
         registry.register(new BlockFancyOre());
     }

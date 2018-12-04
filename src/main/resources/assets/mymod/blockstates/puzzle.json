@@ -1,0 +1,36 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "forge:multi-layer",
+    "custom": {
+      "base": "mymod:puzzle#base",
+      "Solid": "mymod:puzzle#base",
+      "Translucent": "mymod:puzzle#window"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90},
+      "north": {}
+    },
+    "base": [{
+      "custom": { "flip-v": true },
+      "model": "mymod:puzzle.obj"
+    }],
+    "open": {
+      "true": {  },
+      "false": { "submodel": { "block": { "model": "mymod:puzzle_blocker", "textures": {"overlay": "minecraft:blocks/stone"} } } }
+    },
+    "window": [{
+      "model": "mymod:puzzle_window",
+      "textures": {"overlay": "mymod:blocks/puzzle_window_open"}
+    }]
+  }
+}

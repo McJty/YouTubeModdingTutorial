@@ -3,6 +3,7 @@
 tile.mymod.fast_furnace.name=Fast Furnace
 tile.mymod.generator.name=Generator
 tile.mymod.fancy_ore.name=Fancy Ore
+tile.mymod.puzzle.name=Puzzle
 
 item.mymod.fancy_ingot.name=Fancy Ingot
 

@@ -22,6 +22,7 @@ public class TileTank extends TileEntity implements IRestorableTileEntity {
         protected void onContentsChanged() {
             IBlockState state = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, state, state, 3);
+            markDirty();
         }
     };
 

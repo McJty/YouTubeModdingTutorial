@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "mymod:tank",
+    "textures": {
+      "particle": "minecraft:blocks/glass",
+      "tank": "minecraft:blocks/glass"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}]
+  }
+}

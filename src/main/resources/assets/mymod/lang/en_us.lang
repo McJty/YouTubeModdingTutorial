@@ -5,6 +5,7 @@ tile.mymod.generator.name=Generator
 tile.mymod.fancy_ore.name=Fancy Ore
 tile.mymod.puzzle.name=Puzzle
 tile.mymod.fload.name=Fload
+tile.mymod.tank.name=Tank
 
 item.mymod.fload_bucket.name=Fload Bucket
 item.mymod.fancy_ingot.name=Fancy Ingot
@@ -23,3 +24,6 @@ message.mymod.fast_furnace=\
 message.mymod.generator=\
     @aEnergy: %d\n\
     @fPower Generator
+
+message.mymod.tank=\
+    @aFluid: %s

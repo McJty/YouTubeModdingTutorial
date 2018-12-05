@@ -74,9 +74,7 @@ public class BlockTank extends GenericBlock implements ITileEntityProvider {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
-            if (FluidUtil.interactWithFluidHandler(player, hand, world, pos, side)) {
-                world.notifyBlockUpdate(pos, state, state, 3);
-            }
+            FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
         }
         return true;
     }

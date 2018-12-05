@@ -1,6 +1,7 @@
 package mcjty.mymod.tank;
 
 import mcjty.mymod.tools.IRestorableTileEntity;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -16,7 +17,13 @@ public class TileTank extends TileEntity implements IRestorableTileEntity {
 
     public static final int MAX_CONTENTS = 10000;       // 10 buckets
 
-    private FluidTank tank = new FluidTank(MAX_CONTENTS);
+    private FluidTank tank = new FluidTank(MAX_CONTENTS) {
+        @Override
+        protected void onContentsChanged() {
+            IBlockState state = world.getBlockState(pos);
+            world.notifyBlockUpdate(pos, state, state, 3);
+        }
+    };
 
     @Override
     public NBTTagCompound getUpdateTag() {

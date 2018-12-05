@@ -2,10 +2,7 @@ package mcjty.mymod.proxy;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
-import mcjty.mymod.ModBlocks;
-import mcjty.mymod.ModEntities;
-import mcjty.mymod.ModItems;
-import mcjty.mymod.MyMod;
+import mcjty.mymod.*;
 import mcjty.mymod.generator.DamageTracker;
 import mcjty.mymod.network.Messages;
 import mcjty.mymod.worldgen.OreGenerator;
@@ -39,6 +36,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(OreGenerator.instance);
 
         ModEntities.init();
+        ModLiquids.init();
     }
 
     public void init(FMLInitializationEvent e) {

@@ -1,6 +1,8 @@
 package mcjty.mymod.furnace;
 
 import mcjty.mymod.config.FastFurnaceConfig;
+import mcjty.mymod.customrecipes.CustomRecipe;
+import mcjty.mymod.customrecipes.CustomRecipeRegistry;
 import mcjty.mymod.tools.IGuiTile;
 import mcjty.mymod.tools.IRestorableTileEntity;
 import mcjty.mymod.tools.MyEnergyStorage;
@@ -73,7 +75,7 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
 
     private void startSmelt() {
         for (int i = 0 ; i < INPUT_SLOTS ; i++) {
-            ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inputHandler.getStackInSlot(i));
+            ItemStack result = getResult(inputHandler.getStackInSlot(i));
             if (!result.isEmpty()) {
                 if (insertOutput(result.copy(), true)) {
                     setState(FurnaceState.WORKING);
@@ -88,7 +90,7 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
 
     private void attemptSmelt() {
         for (int i = 0 ; i < INPUT_SLOTS ; i++) {
-            ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inputHandler.getStackInSlot(i));
+            ItemStack result = getResult(inputHandler.getStackInSlot(i));
             if (!result.isEmpty()) {
                 // This copy is very important!(
                 if (insertOutput(result.copy(), false)) {
@@ -97,6 +99,16 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
                 }
             }
         }
+    }
+
+    private ItemStack getResult(ItemStack stackInSlot) {
+        // @todo Make a cache for this! Both our own CustomRecipeRegistry.getRecipe() and
+        // getSmeltingResult() loop over all recipes. This is very slow!
+        CustomRecipe recipe = CustomRecipeRegistry.getRecipe(stackInSlot);
+        if (recipe != null) {
+            return recipe.getOutput();
+        }
+        return FurnaceRecipes.instance().getSmeltingResult(stackInSlot);
     }
 
     public int getProgress() {
@@ -172,7 +184,7 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
 
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack);
+            ItemStack result = getResult(stack);
             return !result.isEmpty();
         }
 

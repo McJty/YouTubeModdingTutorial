@@ -53,7 +53,11 @@ minecraft {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_1.12.2:4.13.1.222"
+    // compile against the JEI API but do not include it at runtime
+    deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222:api"
+    // at runtime, use the full JEI jar
+    runtime "mezz.jei:jei_1.12.2:4.13.1.222"
+
     deobfCompile "mcp.mobius.waila:Hwyla:1.8.18-B32_1.12:api"
     deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
     deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.14-7"

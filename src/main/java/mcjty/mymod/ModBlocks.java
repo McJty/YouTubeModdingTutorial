@@ -1,6 +1,8 @@
 package mcjty.mymod;
 
 import mcjty.mymod.fload.BlockFload;
+import mcjty.mymod.floader.BlockFloader;
+import mcjty.mymod.floader.TileFloader;
 import mcjty.mymod.furnace.BlockFastFurnace;
 import mcjty.mymod.furnace.TileFastFurnace;
 import mcjty.mymod.generator.BlockGenerator;
@@ -36,6 +38,8 @@ public class ModBlocks {
     @GameRegistry.ObjectHolder("mymod:tank")
     public static BlockTank blockTank;
 
+    @GameRegistry.ObjectHolder("mymod:floader")
+    public static BlockFloader blockFloader;
 
     @SideOnly(Side.CLIENT)
     public static void initModels() {
@@ -45,6 +49,7 @@ public class ModBlocks {
         blockPuzzle.initModel();
         blockFload.initModel();
         blockTank.initModel();
+        blockFloader.initModel();
     }
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -59,6 +64,9 @@ public class ModBlocks {
 
         registry.register(new BlockTank());
         GameRegistry.registerTileEntity(TileTank.class, MyMod.MODID + "_tank");
+
+        registry.register(new BlockFloader());
+        GameRegistry.registerTileEntity(TileFloader.class, MyMod.MODID + "_floader");
 
         registry.register(new BlockFancyOre());
         registry.register(new BlockFload());

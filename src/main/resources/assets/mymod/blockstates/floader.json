@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube",
+    "textures": {
+      "particle": "mymod:blocks/floader",
+      "north": "mymod:blocks/floader",
+      "south": "mymod:blocks/side",
+      "west": "mymod:blocks/side",
+      "east": "mymod:blocks/side",
+      "up": "mymod:blocks/top",
+      "down": "mymod:blocks/bottom"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90}
+    }
+  }
+}

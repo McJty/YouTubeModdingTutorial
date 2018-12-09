@@ -9,6 +9,10 @@ import mcjty.mymod.generator.BlockGenerator;
 import mcjty.mymod.generator.TileGenerator;
 import mcjty.mymod.puzzle.BlockPuzzle;
 import mcjty.mymod.puzzle.TilePuzzle;
+import mcjty.mymod.superchest.BlockSuperchest;
+import mcjty.mymod.superchest.BlockSuperchestPart;
+import mcjty.mymod.superchest.TileSuperchest;
+import mcjty.mymod.superchest.TileSuperchestPart;
 import mcjty.mymod.tank.BlockTank;
 import mcjty.mymod.tank.TileTank;
 import mcjty.mymod.worldgen.BlockFancyOre;
@@ -41,6 +45,12 @@ public class ModBlocks {
     @GameRegistry.ObjectHolder("mymod:floader")
     public static BlockFloader blockFloader;
 
+    @GameRegistry.ObjectHolder("mymod:superchest")
+    public static BlockSuperchest blockSuperchest;
+
+    @GameRegistry.ObjectHolder("mymod:superchest_part")
+    public static BlockSuperchestPart blockSuperchestPart;
+
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         blockFastFurnace.initModel();
@@ -50,6 +60,8 @@ public class ModBlocks {
         blockFload.initModel();
         blockTank.initModel();
         blockFloader.initModel();
+        blockSuperchest.initModel();
+        blockSuperchestPart.initModel();
     }
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -67,6 +79,12 @@ public class ModBlocks {
 
         registry.register(new BlockFloader());
         GameRegistry.registerTileEntity(TileFloader.class, MyMod.MODID + "_floader");
+
+        registry.register(new BlockSuperchest());
+        GameRegistry.registerTileEntity(TileSuperchest.class, MyMod.MODID + "_superchest");
+
+        registry.register(new BlockSuperchestPart());
+        GameRegistry.registerTileEntity(TileSuperchestPart.class, MyMod.MODID + "_superchestpart");
 
         registry.register(new BlockFancyOre());
         registry.register(new BlockFload());

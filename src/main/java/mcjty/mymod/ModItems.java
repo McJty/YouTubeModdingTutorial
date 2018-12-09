@@ -5,6 +5,8 @@ import mcjty.mymod.furnace.BlockFastFurnace;
 import mcjty.mymod.generator.BlockGenerator;
 import mcjty.mymod.items.ItemFancyIngot;
 import mcjty.mymod.puzzle.BlockPuzzle;
+import mcjty.mymod.superchest.BlockSuperchest;
+import mcjty.mymod.superchest.BlockSuperchestPart;
 import mcjty.mymod.tank.BlockTank;
 import mcjty.mymod.worldgen.BlockFancyOre;
 import net.minecraft.item.Item;
@@ -31,6 +33,8 @@ public class ModItems {
         registry.register(new ItemBlock(ModBlocks.blockPuzzle).setRegistryName(BlockPuzzle.PUZZLE));
         registry.register(new ItemBlock(ModBlocks.blockTank).setRegistryName(BlockTank.TANK));
         registry.register(new ItemBlock(ModBlocks.blockFloader).setRegistryName(BlockFloader.FLOADER));
+        registry.register(new ItemBlock(ModBlocks.blockSuperchest).setRegistryName(BlockSuperchest.SUPERCHEST));
+        registry.register(new ItemBlock(ModBlocks.blockSuperchestPart).setRegistryName(BlockSuperchestPart.SUPERCHEST_PART));
         registry.register(
                 new ItemBlock(ModBlocks.blockFancyOre) {
                     @Override

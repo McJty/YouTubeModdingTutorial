@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": {
+      "all": "mymod:blocks/superchest_part"
+    },
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "formed": {
+      "unformed": { },
+      "p000": { "model": "mymod:empty_model" },
+      "p001": { "model": "mymod:empty_model" },
+      "p010": { "model": "mymod:empty_model" },
+      "p011": { "model": "mymod:empty_model" },
+      "p100": { "model": "mymod:empty_model" },
+      "p101": { "model": "mymod:empty_model" },
+      "p110": { "model": "mymod:empty_model" },
+      "p111": { "model": "mymod:empty_model" }
+    }
+  }
+}

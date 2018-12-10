@@ -6,12 +6,14 @@ import mcjty.mymod.ModBlocks;
 import mcjty.mymod.ModEntities;
 import mcjty.mymod.ModItems;
 import mcjty.mymod.MyMod;
+import mcjty.mymod.rendering.OverlayRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.fml.common.Mod;
@@ -25,6 +27,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
         OBJLoader.INSTANCE.addDomain(MyMod.MODID);
+        MinecraftForge.EVENT_BUS.register(OverlayRenderer.instance);
     }
 
     @SubscribeEvent

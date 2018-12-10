@@ -4,6 +4,7 @@ import mcjty.mymod.floader.BlockFloader;
 import mcjty.mymod.furnace.BlockFastFurnace;
 import mcjty.mymod.generator.BlockGenerator;
 import mcjty.mymod.items.ItemFancyIngot;
+import mcjty.mymod.items.ItemWand;
 import mcjty.mymod.puzzle.BlockPuzzle;
 import mcjty.mymod.superchest.BlockSuperchest;
 import mcjty.mymod.superchest.BlockSuperchestPart;
@@ -21,10 +22,14 @@ public class ModItems {
     @GameRegistry.ObjectHolder("mymod:fancy_ingot")
     public static ItemFancyIngot itemFancyIngot;
 
+    @GameRegistry.ObjectHolder("mymod:wand")
+    public static ItemWand itemWand;
+
 
     @SideOnly(Side.CLIENT)
     public static void initModels() {
         itemFancyIngot.initModel();
+        itemWand.initModel();
     }
 
     public static void register(IForgeRegistry<Item> registry) {
@@ -45,6 +50,7 @@ public class ModItems {
                         .setHasSubtypes(true)
                         .setRegistryName(BlockFancyOre.FANCY_ORE));
         registry.register(new ItemFancyIngot());
+        registry.register(new ItemWand());
     }
 
 }

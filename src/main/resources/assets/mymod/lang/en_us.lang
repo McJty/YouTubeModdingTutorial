@@ -12,6 +12,7 @@ tile.mymod.superchest_part.name=Super Chest Part
 
 item.mymod.fload_bucket.name=Fload Bucket
 item.mymod.fancy_ingot.name=Fancy Ingot
+item.mymod.wand.name=The Wand
 
 fluid.fload=Fload
 

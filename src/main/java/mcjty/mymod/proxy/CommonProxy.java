@@ -4,16 +4,23 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
 import mcjty.mymod.*;
 import mcjty.mymod.generator.DamageTracker;
+import mcjty.mymod.mana.ManaTickHandler;
 import mcjty.mymod.network.Messages;
+import mcjty.mymod.playermana.PlayerMana;
+import mcjty.mymod.playermana.PlayerPropertyEvents;
 import mcjty.mymod.worldgen.OreGenerator;
 import mcjty.mymod.worldgen.WorldTickHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.animation.ITimeValue;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,7 +40,23 @@ public class CommonProxy {
     public void preInit(FMLPreInitializationEvent e) {
         Messages.registerMessages("mymod");
         GameRegistry.registerWorldGenerator(OreGenerator.instance, 5);
+
         MinecraftForge.EVENT_BUS.register(OreGenerator.instance);
+        MinecraftForge.EVENT_BUS.register(ManaTickHandler.instance);
+        MinecraftForge.EVENT_BUS.register(PlayerPropertyEvents.instance);
+
+        CapabilityManager.INSTANCE.register(PlayerMana.class, new Capability.IStorage<PlayerMana>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<PlayerMana> capability, PlayerMana instance, EnumFacing side) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void readNBT(Capability<PlayerMana> capability, PlayerMana instance, EnumFacing side, NBTBase nbt) {
+                throw new UnsupportedOperationException();
+            }
+        }, () -> null);
 
         ModEntities.init();
         ModLiquids.init();

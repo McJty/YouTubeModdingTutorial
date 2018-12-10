@@ -1,5 +1,6 @@
 package mcjty.mymod.network;
 
+import mcjty.mymod.mana.PacketSendMana;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,5 +21,6 @@ public class Messages {
 
         // Client side
         INSTANCE.registerMessage(PacketSyncMachineState.Handler.class, PacketSyncMachineState.class, nextID(), Side.CLIENT);
+        INSTANCE.registerMessage(PacketSendMana.Handler.class, PacketSendMana.class, nextID(), Side.CLIENT);
     }
 }

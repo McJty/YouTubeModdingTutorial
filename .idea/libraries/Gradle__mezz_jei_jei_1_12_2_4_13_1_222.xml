@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: mezz.jei:jei_1.12.2:4.13.1.222">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/mezz.jei/jei_1.12.2/4.13.1.222/f7672ddb5b7ac55ce3b49b55ad39977092737469/jei_1.12.2-4.13.1.222.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/mezz.jei/jei_1.12.2/4.13.1.222/181b6c037c0adf97973ce5c44fd3675786f6c88f/jei_1.12.2-4.13.1.222-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/mezz.jei/jei_1.12.2/4.13.1.222/f23f5c5244e56f111dae4b63fe2db8df1b2856ef/jei_1.12.2-4.13.1.222-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

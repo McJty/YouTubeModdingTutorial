@@ -18,6 +18,9 @@ fluid.fload=Fload
 
 entity.mymod_guard.name=Guard
 
+key.wandmode=Wand Mode
+key.categories.mymod=My Mod
+
 itemGroup.mymod=My Mod
 
 message.mymod.fast_furnace=\

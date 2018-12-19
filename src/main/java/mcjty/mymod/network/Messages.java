@@ -1,5 +1,6 @@
 package mcjty.mymod.network;
 
+import mcjty.mymod.input.PacketToggleMode;
 import mcjty.mymod.mana.PacketSendMana;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -18,6 +19,7 @@ public class Messages {
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(channelName);
 
         // Server side
+        INSTANCE.registerMessage(PacketToggleMode.Handler.class, PacketToggleMode.class, nextID(), Side.SERVER);
 
         // Client side
         INSTANCE.registerMessage(PacketSyncMachineState.Handler.class, PacketSyncMachineState.class, nextID(), Side.CLIENT);

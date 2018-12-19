@@ -6,6 +6,8 @@ import mcjty.mymod.ModBlocks;
 import mcjty.mymod.ModEntities;
 import mcjty.mymod.ModItems;
 import mcjty.mymod.MyMod;
+import mcjty.mymod.input.KeyBindings;
+import mcjty.mymod.input.KeyInputHandler;
 import mcjty.mymod.rendering.OverlayRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,6 +39,14 @@ public class ClientProxy extends CommonProxy {
         ModItems.initModels();
         ModEntities.initModels();
     }
+
+    @Override
+    public void init(FMLInitializationEvent e) {
+        super.init(e);
+        MinecraftForge.EVENT_BUS.register(new KeyInputHandler());
+        KeyBindings.init();
+    }
+
 
     @Override
     public IAnimationStateMachine load(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {

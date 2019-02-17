@@ -17,75 +17,75 @@ import mcjty.mymod.tank.BlockTank;
 import mcjty.mymod.tank.TileTank;
 import mcjty.mymod.worldgen.BlockFancyOre;
 import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class ModBlocks {
 
-    @GameRegistry.ObjectHolder("mymod:fast_furnace")
+    @ObjectHolder("mymod:fast_furnace")
     public static BlockFastFurnace blockFastFurnace;
 
-    @GameRegistry.ObjectHolder("mymod:generator")
+    @ObjectHolder("mymod:generator")
     public static BlockGenerator blockGenerator;
 
-    @GameRegistry.ObjectHolder("mymod:fancy_ore")
+    @ObjectHolder("mymod:fancy_ore")
     public static BlockFancyOre blockFancyOre;
 
-    @GameRegistry.ObjectHolder("mymod:puzzle")
+    @ObjectHolder("mymod:puzzle")
     public static BlockPuzzle blockPuzzle;
 
-    @GameRegistry.ObjectHolder("mymod:fload")
+    @ObjectHolder("mymod:fload")
     public static BlockFload blockFload;
 
-    @GameRegistry.ObjectHolder("mymod:tank")
+    @ObjectHolder("mymod:tank")
     public static BlockTank blockTank;
 
-    @GameRegistry.ObjectHolder("mymod:floader")
+    @ObjectHolder("mymod:floader")
     public static BlockFloader blockFloader;
 
-    @GameRegistry.ObjectHolder("mymod:superchest")
+    @ObjectHolder("mymod:superchest")
     public static BlockSuperchest blockSuperchest;
 
-    @GameRegistry.ObjectHolder("mymod:superchest_part")
+    @ObjectHolder("mymod:superchest_part")
     public static BlockSuperchestPart blockSuperchestPart;
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void initModels() {
-        blockFastFurnace.initModel();
-        blockGenerator.initModel();
-        blockFancyOre.initModel();
-        blockPuzzle.initModel();
-        blockFload.initModel();
-        blockTank.initModel();
-        blockFloader.initModel();
-        blockSuperchest.initModel();
-        blockSuperchestPart.initModel();
+//        blockFastFurnace.initModel();
+//        blockGenerator.initModel();
+//        blockFancyOre.initModel();
+//        blockPuzzle.initModel();
+//        blockFload.initModel();
+//        blockTank.initModel();
+//        blockFloader.initModel();
+//        blockSuperchest.initModel();
+//        blockSuperchestPart.initModel();
+    }
+
+    public static void registerTiles(IForgeRegistry<TileEntityType<?>> registry) {
+        registry.register(TileEntityType.Builder.create(TileFastFurnace::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "fast_furnace")));
+        registry.register(TileEntityType.Builder.create(TileGenerator::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "generator")));
+        registry.register(TileEntityType.Builder.create(TilePuzzle::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "puzzle")));
+        registry.register(TileEntityType.Builder.create(TileTank::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "tank")));
+        registry.register(TileEntityType.Builder.create(TileFloader::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "floader")));
+        registry.register(TileEntityType.Builder.create(TileSuperchest::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchest")));
+        registry.register(TileEntityType.Builder.create(TileSuperchestPart::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchestpart")));
     }
 
     public static void register(IForgeRegistry<Block> registry) {
         registry.register(new BlockFastFurnace());
-        GameRegistry.registerTileEntity(TileFastFurnace.class, MyMod.MODID + "_fast_furnace");
-
         registry.register(new BlockGenerator());
-        GameRegistry.registerTileEntity(TileGenerator.class, MyMod.MODID + "_generator");
-
         registry.register(new BlockPuzzle());
-        GameRegistry.registerTileEntity(TilePuzzle.class, MyMod.MODID + "_puzzle");
-
         registry.register(new BlockTank());
-        GameRegistry.registerTileEntity(TileTank.class, MyMod.MODID + "_tank");
-
         registry.register(new BlockFloader());
-        GameRegistry.registerTileEntity(TileFloader.class, MyMod.MODID + "_floader");
-
         registry.register(new BlockSuperchest());
-        GameRegistry.registerTileEntity(TileSuperchest.class, MyMod.MODID + "_superchest");
-
         registry.register(new BlockSuperchestPart());
-        GameRegistry.registerTileEntity(TileSuperchestPart.class, MyMod.MODID + "_superchestpart");
-
         registry.register(new BlockFancyOre());
         registry.register(new BlockFload());
     }

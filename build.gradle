@@ -1,21 +1,15 @@
 buildscript {
     repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
-
-apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
 
 repositories {
     maven { // The repo from which to get waila
@@ -46,40 +40,40 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 minecraft {
-    version = "1.12.2-14.23.5.2775"
-    runDir = "run"
-    mappings = "stable_39"
-    useDepAts = true
+    mappings channel: 'snapshot', version: '20180921-1.13'
+
+    runs {
+        client = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+        server = {
+            // recommended logging data for a userdev environment
+            properties 'forge.logging.markers': 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // recommended logging level for the console
+            properties 'forge.logging.console.level': 'debug'
+            workingDirectory project.file('run').canonicalPath
+            source sourceSets.main
+        }
+    }
 }
 
 dependencies {
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.21'
+
+
     // compile against the JEI API but do not include it at runtime
-    deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222:api"
+//    deobfProvided "mezz.jei:jei_1.12.2:4.13.1.222:api"
     // at runtime, use the full JEI jar
-    runtime "mezz.jei:jei_1.12.2:4.13.1.222"
+//    runtime "mezz.jei:jei_1.12.2:4.13.1.222"
 
-    deobfCompile "mcp.mobius.waila:Hwyla:1.8.18-B32_1.12:api"
-    deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
-    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.14-7"
-    deobfCompile "com.github.mcjty:intwheel:1.12-1.2.7"
+//    deobfCompile "mcp.mobius.waila:Hwyla:1.8.18-B32_1.12:api"
+//    deobfCompile "cofh:RedstoneFlux:1.12-2.0.0.1:universal"
+//    deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.14-7"
+//    deobfCompile "com.github.mcjty:intwheel:1.12-1.2.7"
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-}

@@ -1,13 +1,13 @@
 package mcjty.mymod.tools;
 
-import mcjty.mymod.MyMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.fluid.IFluidState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,11 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -30,8 +26,9 @@ import java.util.regex.Pattern;
 public class GenericBlock extends Block {
 
     public GenericBlock(Material materialIn) {
-        super(materialIn);
-        setCreativeTab(MyMod.creativeTab);
+        super(Properties.create(materialIn));
+        // @todo 1.13
+//        setCreativeTab(MyMod.creativeTab);
     }
 
     private static final Pattern COMPILE = Pattern.compile("@", Pattern.LITERAL);
@@ -42,9 +39,8 @@ public class GenericBlock extends Block {
         Collections.addAll(tooltip, StringUtils.split(translated, "\n"));
     }
 
-
     @Override
-    public void getDrops(NonNullList<ItemStack> result, IBlockAccess world, BlockPos pos, IBlockState metadata, int fortune) {
+    public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune) {
         TileEntity tileEntity = world.getTileEntity(pos);
 
         // Always check this!
@@ -53,25 +49,26 @@ public class GenericBlock extends Block {
             NBTTagCompound tagCompound = new NBTTagCompound();
             ((IRestorableTileEntity)tileEntity).writeRestorableToNBT(tagCompound);
 
-            stack.setTagCompound(tagCompound);
-            result.add(stack);
+            stack.setTag(tagCompound);
+            drops.add(stack);
         } else {
-            super.getDrops(result, world, pos, metadata, fortune);
+            super.getDrops(state, drops, world, pos, fortune);
         }
     }
 
+
     @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest, IFluidState fluid) {
         if (willHarvest) {
             return true; // If it will harvest, delay deletion of the block until after getDrops
         }
-        return super.removedByPlayer(state, world, pos, player, willHarvest);
+        return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
     }
 
     @Override
     public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
         super.harvestBlock(world, player, pos, state, te, stack);
-        world.setBlockToAir(pos);
+        world.setBlockState(pos, Blocks.AIR.getDefaultState());
     }
 
     @Override
@@ -82,7 +79,7 @@ public class GenericBlock extends Block {
 
         // Always check this!
         if (tileEntity instanceof IRestorableTileEntity) {
-            NBTTagCompound tagCompound = stack.getTagCompound();
+            NBTTagCompound tagCompound = stack.getTag();
             if (tagCompound != null) {
                 ((IRestorableTileEntity) tileEntity).readRestorableFromNBT(tagCompound);
             }
@@ -90,7 +87,7 @@ public class GenericBlock extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         // Only execute on the server
         if (world.isRemote) {
             return true;
@@ -99,12 +96,8 @@ public class GenericBlock extends Block {
         if (!(te instanceof IGuiTile)) {
             return false;
         }
-        player.openGui(MyMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+        // @todo 1.13
+//        player.openGui(MyMod.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
         return true;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 }

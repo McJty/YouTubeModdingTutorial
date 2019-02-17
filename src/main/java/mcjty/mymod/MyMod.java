@@ -1,27 +1,50 @@
 package mcjty.mymod;
 
 import mcjty.mymod.generator.DamageTracker;
-import mcjty.mymod.proxy.CommonProxy;
-import net.minecraft.creativetab.CreativeTabs;
+import mcjty.mymod.mana.ManaTickHandler;
+import mcjty.mymod.network.Messages;
+import mcjty.mymod.playermana.PlayerMana;
+import mcjty.mymod.playermana.PlayerPropertyEvents;
+import mcjty.mymod.proxy.ClientProxy;
+import mcjty.mymod.proxy.IProxy;
+import mcjty.mymod.proxy.ServerProxy;
+import mcjty.mymod.worldgen.WorldTickHandler;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.INBTBase;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 
-@Mod(modid = MyMod.MODID, name = MyMod.MODNAME, version = MyMod.MODVERSION, dependencies = "required-after:forge@[14.23.5.2768,)", useMetadata = true)
+
+@Mod(MyMod.MODID)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MyMod {
 
     public static final String MODID = "mymod";
-    public static final String MODNAME = "My Mod";
-    public static final String MODVERSION= "0.0.1";
 
-    @SidedProxy(clientSide = "mcjty.mymod.proxy.ClientProxy", serverSide = "mcjty.mymod.proxy.ServerProxy")
-    public static CommonProxy proxy;
+    public static IProxy proxy = DistExecutor.runForDist(() -> () -> new ClientProxy(), () -> () -> new ServerProxy());
 
-    public static CreativeTabs creativeTab = new CreativeTabs("mymod") {
+
+    public static ItemGroup creativeTab = new ItemGroup("mymod") {
         @Override
         public ItemStack createIcon() {
             return new ItemStack(ModBlocks.blockFastFurnace);
@@ -31,38 +54,83 @@ public class MyMod {
     public MyMod() {
         // This has to be done VERY early
         FluidRegistry.enableUniversalBucket();
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     }
 
-    @Mod.Instance
-    public static MyMod instance;
+    private static final Logger logger = LogManager.getLogger();
 
-    public static Logger logger;
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        logger = event.getModLog();
-        proxy.preInit(event);
+    private void setup(final FMLCommonSetupEvent event) {
+        Messages.registerMessages("mymod");
+        // @todo 1.13
+//        GameRegistry.registerWorldGenerator(OreGenerator.instance, 5);
+
+//        MinecraftForge.EVENT_BUS.register(OreGenerator.instance);
+        MinecraftForge.EVENT_BUS.register(ManaTickHandler.instance);
+        MinecraftForge.EVENT_BUS.register(PlayerPropertyEvents.instance);
+
+        CapabilityManager.INSTANCE.register(PlayerMana.class, new Capability.IStorage<PlayerMana>() {
+            @Nullable
+            @Override
+            public INBTBase writeNBT(Capability<PlayerMana> capability, PlayerMana instance, EnumFacing side) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public void readNBT(Capability<PlayerMana> capability, PlayerMana instance, EnumFacing side, INBTBase nbt) {
+                throw new UnsupportedOperationException();
+            }
+        }, () -> null);
+
+        ModEntities.init();
+        ModLiquids.init();
+
+        // @todo 1.13
+//        NetworkRegistry.INSTANCE.registerGuiHandler(MyMod.instance, new GuiHandler());
+        MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
+        MinecraftForge.EVENT_BUS.register(DamageTracker.instance);
+
+        // @todo 1.13
+//        GameRegistry.addSmelting(ModBlocks.blockFancyOre, new ItemStack(ModItems.itemFancyIngot, 1), 0.5f);
+//        OreDictionary.registerOre("oreFancy", ModBlocks.blockFancyOre);
+
+        proxy.setup(event);
     }
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent e) {
-        proxy.init(e);
+    @SubscribeEvent
+    public static void registerTiles(RegistryEvent.Register<TileEntityType<?>> event) {
+        ModBlocks.registerTiles(event.getRegistry());
     }
 
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
-        proxy.postInit(e);
+    @SubscribeEvent
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
+        ModBlocks.register(event.getRegistry());
     }
 
-    @Mod.EventHandler
+    @SubscribeEvent
+    public static void registerItems(RegistryEvent.Register<Item> event) {
+        ModItems.register(event.getRegistry());
+    }
+
+
+
+    @SubscribeEvent
     public void serverStarted(FMLServerStartedEvent event) {
         DamageTracker.instance.reset();
     }
 
-    @Mod.EventHandler
+    @SubscribeEvent
     public void serverStopped(FMLServerStoppedEvent event) {
         DamageTracker.instance.reset();
     }
 
+
+//    @SubscribeEvent
+//    public void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+//        if (event.getModID().equals(MODID)) {
+//            ConfigManager.sync(MODID, Config.Type.INSTANCE);
+//        }
+//    }
 
 }

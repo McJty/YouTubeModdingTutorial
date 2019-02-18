@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.entity.passive.IAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public class EntityGuard extends EntityCreature implements IAnimals {
+public class EntityGuard extends EntityCreature implements IAnimal {
 
     public static final ResourceLocation LOOT = new ResourceLocation(MyMod.MODID, "entities/guard");
 
@@ -38,6 +38,7 @@ public class EntityGuard extends EntityCreature implements IAnimals {
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 4, false, true,
                 entity -> entity != null && IMob.VISIBLE_MOB_SELECTOR.apply(entity)));
     }
+
 
 
     @Override

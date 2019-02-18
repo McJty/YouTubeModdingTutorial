@@ -16,27 +16,34 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class GenericBlock extends Block {
 
-    public GenericBlock(Material materialIn) {
-        super(Properties.create(materialIn));
+    public GenericBlock(Block.Properties properties) {
+        super(properties);
         // @todo 1.13
 //        setCreativeTab(MyMod.creativeTab);
     }
 
     private static final Pattern COMPILE = Pattern.compile("@", Pattern.LITERAL);
 
-    protected void addInformationLocalized(List<String> tooltip, String key, Object... parameters) {
+    protected void addInformationLocalized(List<ITextComponent> tooltip, String key, Object... parameters) {
         String translated = I18n.format(key, parameters);
         translated = COMPILE.matcher(translated).replaceAll("\u00a7");
-        Collections.addAll(tooltip, StringUtils.split(translated, "\n"));
+
+        Collections.addAll(tooltip.stream().map(ITextComponent::getFormattedText).collect(Collectors.toList()), StringUtils.split(translated, "\n"));
+    }
+
+    public void initModel() {
+
     }
 
     @Override

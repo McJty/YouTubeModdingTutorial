@@ -116,12 +116,12 @@ public class MyMod {
 
 
     @SubscribeEvent
-    public void serverStarted(FMLServerStartedEvent event) {
+    public static void serverStarted(FMLServerStartedEvent event) {
         DamageTracker.instance.reset();
     }
 
     @SubscribeEvent
-    public void serverStopped(FMLServerStoppedEvent event) {
+    public static void serverStopped(FMLServerStoppedEvent event) {
         DamageTracker.instance.reset();
     }
 

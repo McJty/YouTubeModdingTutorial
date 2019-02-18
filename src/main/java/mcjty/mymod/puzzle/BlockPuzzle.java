@@ -5,57 +5,53 @@ import mcjty.mymod.tools.GenericBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
 public class BlockPuzzle extends GenericBlock implements ITileEntityProvider {
 
-    public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final PropertyBool OPEN = PropertyBool.create("open");
+    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final BooleanProperty OPEN = BooleanProperty.create("open");
 
     public static final ResourceLocation PUZZLE = new ResourceLocation(MyMod.MODID, "puzzle");
 
     public BlockPuzzle() {
-        super(Material.WOOD);
-        // mymod:furnace
+        super(Properties.create(Material.WOOD));
         setRegistryName(PUZZLE);
-        setTranslationKey(MyMod.MODID + ".puzzle");
-        setHarvestLevel("axe", 1);
+        // @todo 1.13
+//        setHarvestLevel("axe", 1);
 
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(getStateContainer().getBaseState().with(FACING, EnumFacing.NORTH));
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void initModel() {
-        super.initModel();
         ClientRegistry.bindTileEntitySpecialRenderer(TilePuzzle.class, new PuzzleTESR());
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TilePuzzle();
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity tileEntity = world.getTileEntity(pos);
         if (tileEntity instanceof TilePuzzle && !world.isRemote) {
             ((TilePuzzle) tileEntity).activate(state);
@@ -72,29 +68,19 @@ public class BlockPuzzle extends GenericBlock implements ITileEntityProvider {
         }
     }
 
-
+    @Nullable
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(BlockItemUseContext context) {
+        BlockPos pos = context.getPos();
+        // @todo 1.13
         return this.getDefaultState()
-                .withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer))
-                .withProperty(OPEN, false);
+                .with(FACING, EnumFacing.getFacingFromVector(pos.getX(), pos.getY(), pos.getZ()))
+                .with(OPEN, false);
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, OPEN);
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState()
-                .withProperty(FACING, EnumFacing.byIndex(meta & 7))
-                .withProperty(OPEN, (meta & 8) != 0);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex() + (state.getValue(OPEN) ? 8 : 0);
+    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+        builder.add(FACING).add(OPEN);
     }
 
     @Override

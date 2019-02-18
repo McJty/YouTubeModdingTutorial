@@ -16,12 +16,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,19 +31,19 @@ public class BlockTank extends GenericBlock implements ITileEntityProvider {
     public static final ResourceLocation TANK = new ResourceLocation(MyMod.MODID, "tank");
 
     public BlockTank() {
-        super(Material.GLASS);
-        setHardness(1.0f);
-        setSoundType(SoundType.GLASS);
+        super(Properties.create(Material.GLASS)
+            .hardnessAndResistance(1.0f)
+            .sound(SoundType.GLASS));
         setRegistryName(TANK);
-        setTranslationKey(MyMod.MODID + ".tank");
-        setHarvestLevel("pickaxe", 0);
+        // @todo 1.13
+//        setHarvestLevel("pickaxe", 0);
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flags) {
-        NBTTagCompound tagCompound = stack.getTagCompound();
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flags) {
+        NBTTagCompound tagCompound = stack.getTag();
         if (tagCompound != null) {
-            NBTTagCompound nbt = tagCompound.getCompoundTag("tank");
+            NBTTagCompound nbt = tagCompound.getCompound("tank");
             FluidStack fluidStack = null;
             if (!nbt.hasKey("Empty")) {
                 fluidStack = FluidStack.loadFluidStackFromNBT(nbt);
@@ -57,22 +57,19 @@ public class BlockTank extends GenericBlock implements ITileEntityProvider {
         }
     }
 
-
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileTank();
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void initModel() {
-        super.initModel();
         ClientRegistry.bindTileEntitySpecialRenderer(TileTank.class, new TankTESR());
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
         }
@@ -85,15 +82,15 @@ public class BlockTank extends GenericBlock implements ITileEntityProvider {
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isNormalCube(IBlockState p_149721_1_) {
         return false;
     }
+
 
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }

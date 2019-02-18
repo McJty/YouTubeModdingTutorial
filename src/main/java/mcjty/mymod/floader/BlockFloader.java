@@ -2,60 +2,48 @@ package mcjty.mymod.floader;
 
 import mcjty.mymod.MyMod;
 import mcjty.mymod.tools.GenericBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nullable;
 
 public class BlockFloader extends GenericBlock implements ITileEntityProvider {
 
-    public static final PropertyDirection FACING_HORIZ = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final DirectionProperty FACING_HORIZ = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
     public static final ResourceLocation FLOADER = new ResourceLocation(MyMod.MODID, "floader");
 
     public BlockFloader() {
-        super(Material.IRON);
-        // mymod:furnace
+        super(Properties.create(Material.IRON));
         setRegistryName(FLOADER);
-        setTranslationKey(MyMod.MODID + ".floader");
-        setHarvestLevel("pickaxe", 1);
+//        setHarvestLevel("pickaxe", 1);
 
-        setDefaultState(blockState.getBaseState().withProperty(FACING_HORIZ, EnumFacing.NORTH));
+        setDefaultState(getStateContainer().getBaseState().with(FACING_HORIZ, EnumFacing.NORTH));
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(IBlockReader worldIn) {
         return new TileFloader();
     }
 
-
+    @Nullable
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING_HORIZ, placer.getHorizontalFacing().getOpposite());
+    public IBlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(FACING_HORIZ, context.getPlayer().getHorizontalFacing().getOpposite());
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING_HORIZ);
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING_HORIZ, EnumFacing.byIndex((meta & 3) + 2));
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING_HORIZ).getIndex() - 2;
+    protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+        builder.add(FACING_HORIZ);
     }
 }

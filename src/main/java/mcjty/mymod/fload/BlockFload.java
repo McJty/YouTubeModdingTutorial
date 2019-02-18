@@ -1,31 +1,12 @@
 package mcjty.mymod.fload;
 
 
-import mcjty.mymod.ModLiquids;
-import mcjty.mymod.MyMod;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-public class BlockFload extends BlockFluidClassic {
+public class BlockFload {} /*extends BlockFlowingFluid {
 
     public static final ResourceLocation FLOAD = new ResourceLocation(MyMod.MODID, "fload");
 
     public BlockFload() {
-        super(ModLiquids.fload, Material.WATER);
+        super(ModLiquids.fload, Properties.create(Material.WATER));
         setCreativeTab(MyMod.creativeTab);
         setTranslationKey(MyMod.MODID + ".fload");
         setRegistryName(FLOAD);
@@ -52,3 +33,4 @@ public class BlockFload extends BlockFluidClassic {
         }
     }
 }
+*/

@@ -7,15 +7,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
-public class PuzzleTESR extends TileEntitySpecialRenderer<TilePuzzle> {
+public class PuzzleTESR extends TileEntityRenderer<TilePuzzle> {
 
     @Override
     public void render(TilePuzzle te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

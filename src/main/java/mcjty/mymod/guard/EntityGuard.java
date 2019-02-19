@@ -1,5 +1,6 @@
 package mcjty.mymod.guard;
 
+import mcjty.mymod.ModEntities;
 import mcjty.mymod.MyMod;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -23,7 +24,7 @@ public class EntityGuard extends EntityCreature implements IAnimal {
     private int attackTimer;
 
     public EntityGuard(World worldIn) {
-        super(worldIn);
+        super(ModEntities.TYPE_GUARD, worldIn);
         this.setSize(0.6F, 1.95F);
         this.experienceValue = 5;
     }
@@ -36,24 +37,23 @@ public class EntityGuard extends EntityCreature implements IAnimal {
         this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 0.6D));
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityLiving.class, 4, false, true,
-                entity -> entity != null && IMob.VISIBLE_MOB_SELECTOR.apply(entity)));
+                entity -> entity != null && IMob.VISIBLE_MOB_SELECTOR.test(entity)));
     }
 
-
-
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void tick() {
+        super.tick();
         if (this.attackTimer > 0) {
             --this.attackTimer;
         }
     }
 
+
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0D);
+    protected void registerAttributes() {
+        super.registerAttributes();
+        this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
+        this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(50.0D);
     }
 
     @Override

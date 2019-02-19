@@ -10,6 +10,7 @@ import mcjty.mymod.proxy.IProxy;
 import mcjty.mymod.proxy.ServerProxy;
 import mcjty.mymod.worldgen.WorldTickHandler;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -113,6 +114,10 @@ public class MyMod {
         ModItems.register(event.getRegistry());
     }
 
+    @SubscribeEvent
+    public static void registerEntities(RegistryEvent.Register<EntityType<?>> event) {
+        ModEntities.register(event.getRegistry());
+    }
 
 
     @SubscribeEvent

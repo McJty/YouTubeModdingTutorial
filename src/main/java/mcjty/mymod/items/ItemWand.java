@@ -3,10 +3,8 @@ package mcjty.mymod.items;
 import mcjty.mymod.MyMod;
 import mcjty.mymod.laser.EntitySphere;
 import mcjty.mymod.mana.WorldMana;
-import mcjty.mymod.playermana.PlayerMana;
 import mcjty.mymod.playermana.PlayerProperties;
 import mcjty.mymod.tools.RayTraceTools;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,40 +16,32 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
 public class ItemWand extends Item {
 
     public ItemWand() {
-        setTranslationKey(MyMod.MODID + ".wand");
+        super(new Properties().group(MyMod.creativeTab));
         setRegistryName(new ResourceLocation(MyMod.MODID, "wand"));
-        setCreativeTab(MyMod.creativeTab);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
     @Override
-    public void addInformation(ItemStack stack, World player, List<String> list, ITooltipFlag flag) {
+    public void addInformation(ItemStack stack, World player, List<ITextComponent> list, ITooltipFlag flag) {
         super.addInformation(stack, player, list, flag);
         WandMode mode = getMode(stack);
-        list.add("Mode: " + mode.name());
+        list.add(new TextComponentString("Mode: " + mode.name()));
     }
 
     private WandMode getMode(ItemStack stack) {
-        if (!stack.hasTagCompound()) {
+        if (!stack.hasTag()) {
             return WandMode.SPHERE;
         }
-        return WandMode.values()[stack.getTagCompound().getInteger("mode")];
+        return WandMode.values()[stack.getTag().getInt("mode")];
     }
 
     public void toggleMode(EntityPlayer player, ItemStack stack) {
@@ -62,10 +52,10 @@ public class ItemWand extends Item {
             mode = WandMode.SPHERE;
         }
         player.sendStatusMessage(new TextComponentString(TextFormatting.GREEN + "Switched to " + mode.name()), false);
-        if (!stack.hasTagCompound()) {
-            stack.setTagCompound(new NBTTagCompound());
+        if (!stack.hasTag()) {
+            stack.setTag(new NBTTagCompound());
         }
-        stack.getTagCompound().setInteger("mode", mode.ordinal());
+        stack.getTag().setInt("mode", mode.ordinal());
     }
 
 
@@ -93,30 +83,32 @@ public class ItemWand extends Item {
     }
 
     private void levitateEntity(World world, EntityPlayer player) {
-        PlayerMana playerMana = PlayerProperties.getPlayerMana(player);
-        if (playerMana.getMana() >= .1f) {
-            world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ENDERPEARL_THROW, SoundCategory.NEUTRAL, 1.0f, 1.0f);
-            playerMana.setMana(playerMana.getMana() - .1f);
-            RayTraceTools.Beam beam = new RayTraceTools.Beam(world, player, 20);
-            RayTraceTools.rayTrace(beam, entity -> {
-                if (entity instanceof EntityLivingBase) {
-                    ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 60, 1));
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-        }
+        player.getCapability(PlayerProperties.PLAYER_MANA).ifPresent(playerMana -> {
+            if (playerMana.getMana() >= .1f) {
+                world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ENDER_PEARL_THROW, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+                playerMana.setMana(playerMana.getMana() - .1f);
+                RayTraceTools.Beam beam = new RayTraceTools.Beam(world, player, 20);
+                RayTraceTools.rayTrace(beam, entity -> {
+                    if (entity instanceof EntityLivingBase) {
+                        ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.LEVITATION, 60, 1));
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+            }
+        });
     }
 
     private void fireSphere(World world, EntityPlayer player) {
-        PlayerMana playerMana = PlayerProperties.getPlayerMana(player);
-        if (playerMana.getMana() >= .5f) {
-            world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 1.0f);
-            playerMana.setMana(playerMana.getMana() - .5f);
-            RayTraceTools.Beam beam = new RayTraceTools.Beam(world, player, 20);
-            spawnSphere(player, beam);
-        }
+        player.getCapability(PlayerProperties.PLAYER_MANA).ifPresent(playerMana -> {
+            if (playerMana.getMana() >= .5f) {
+                world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+                playerMana.setMana(playerMana.getMana() - .5f);
+                RayTraceTools.Beam beam = new RayTraceTools.Beam(world, player, 20);
+                spawnSphere(player, beam);
+            }
+        });
     }
 
     private void spawnSphere(EntityPlayer player, RayTraceTools.Beam beam) {
@@ -137,7 +129,8 @@ public class ItemWand extends Item {
     private void chargeMana(World world, EntityPlayer player) {
         WorldMana worldMana = WorldMana.get(world);
         float amount = worldMana.extractMana(world, player.getPosition());
-        PlayerMana playerMana = PlayerProperties.getPlayerMana(player);
-        playerMana.setMana(playerMana.getMana() + amount);
+        player.getCapability(PlayerProperties.PLAYER_MANA).ifPresent(playerMana -> {
+            playerMana.setMana(playerMana.getMana() + amount);
+        });
     }
 }

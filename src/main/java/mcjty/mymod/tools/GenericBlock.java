@@ -75,7 +75,7 @@ public class GenericBlock extends Block {
     @Override
     public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
         super.harvestBlock(world, player, pos, state, te, stack);
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        world.removeBlock(pos);
     }
 
     @Override

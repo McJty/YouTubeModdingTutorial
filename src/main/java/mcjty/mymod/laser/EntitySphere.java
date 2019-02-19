@@ -1,20 +1,17 @@
 package mcjty.mymod.laser;
 
+import mcjty.mymod.ModEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntitySphere extends Entity {
 
@@ -27,16 +24,12 @@ public class EntitySphere extends Entity {
     private double accelerationZ;
 
     public EntitySphere(World worldIn) {
-        super(worldIn);
+        super(ModEntities.TYPE_SPHERE, worldIn);
         this.setSize(1.0F, 1.0F);
     }
 
-    @Override
-    protected void entityInit() {
-    }
-
     public EntitySphere(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ) {
-        super(worldIn);
+        super(ModEntities.TYPE_SPHERE, worldIn);
         this.shootingEntity = shooter;
         this.setSize(1.0F, 1.0F);
         this.setLocationAndAngles(shooter.posX, shooter.posY, shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
@@ -51,9 +44,9 @@ public class EntitySphere extends Entity {
     }
 
     @Override
-    public void onUpdate() {
+    public void tick() {
         if (this.world.isRemote || this.world.isBlockLoaded(new BlockPos(this))) {
-            super.onUpdate();
+            super.tick();
 
             ++this.ticksInAir;
             RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, this.ticksInAir >= 25, this.shootingEntity);

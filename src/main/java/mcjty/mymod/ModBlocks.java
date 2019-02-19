@@ -16,6 +16,7 @@ import mcjty.mymod.superchest.TileSuperchestPart;
 import mcjty.mymod.tank.BlockTank;
 import mcjty.mymod.tank.TileTank;
 import mcjty.mymod.worldgen.BlockFancyOre;
+import mcjty.mymod.worldgen.OreType;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -34,8 +35,14 @@ public class ModBlocks {
     @ObjectHolder("mymod:generator")
     public static BlockGenerator blockGenerator;
 
-    @ObjectHolder("mymod:fancy_ore")
-    public static BlockFancyOre blockFancyOre;
+    @ObjectHolder("mymod:fancy_ore_overworld")
+    public static BlockFancyOre blockFancyOreOverworld;
+
+    @ObjectHolder("mymod:fancy_ore_nether")
+    public static BlockFancyOre blockFancyOreNether;
+
+    @ObjectHolder("mymod:fancy_ore_end")
+    public static BlockFancyOre blockFancyOreEnd;
 
     @ObjectHolder("mymod:puzzle")
     public static BlockPuzzle blockPuzzle;
@@ -55,6 +62,8 @@ public class ModBlocks {
     @ObjectHolder("mymod:superchest_part")
     public static BlockSuperchestPart blockSuperchestPart;
 
+    public static TileEntityType<?> TYPE_FLOADER;
+
     @OnlyIn(Dist.CLIENT)
     public static void initModels() {
 //        blockFastFurnace.initModel();
@@ -73,7 +82,7 @@ public class ModBlocks {
         registry.register(TileEntityType.Builder.create(TileGenerator::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "generator")));
         registry.register(TileEntityType.Builder.create(TilePuzzle::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "puzzle")));
         registry.register(TileEntityType.Builder.create(TileTank::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "tank")));
-        registry.register(TileEntityType.Builder.create(TileFloader::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "floader")));
+        registry.register(TYPE_FLOADER = TileEntityType.Builder.create(TileFloader::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "floader")));
         registry.register(TileEntityType.Builder.create(TileSuperchest::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchest")));
         registry.register(TileEntityType.Builder.create(TileSuperchestPart::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchestpart")));
     }
@@ -86,7 +95,9 @@ public class ModBlocks {
         registry.register(new BlockFloader());
         registry.register(new BlockSuperchest());
         registry.register(new BlockSuperchestPart());
-        registry.register(new BlockFancyOre());
+        registry.register(new BlockFancyOre(OreType.ORE_OVERWORLD, BlockFancyOre.FANCY_ORE_OVERWORLD));
+        registry.register(new BlockFancyOre(OreType.ORE_NETHER, BlockFancyOre.FANCY_ORE_NETHER));
+        registry.register(new BlockFancyOre(OreType.ORE_END, BlockFancyOre.FANCY_ORE_END));
         registry.register(new BlockFload());
     }
 

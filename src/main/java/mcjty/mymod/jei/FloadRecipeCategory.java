@@ -1,23 +1,6 @@
 package mcjty.mymod.jei;
 
-import mcjty.mymod.MyMod;
-import mezz.jei.api.IGuiHelper;
-import mezz.jei.api.gui.IDrawable;
-import mezz.jei.api.gui.IGuiFluidStackGroup;
-import mezz.jei.api.gui.IGuiItemStackGroup;
-import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-
-public class FloadRecipeCategory implements IRecipeCategory<FloadRecipeWrapper> {
+public class FloadRecipeCategory {} /* implements IRecipeCategory<FloadRecipeWrapper> {
 
     private final IDrawable background;
 
@@ -68,3 +51,4 @@ public class FloadRecipeCategory implements IRecipeCategory<FloadRecipeWrapper> 
         return MyMod.MODNAME;
     }
 }
+*/

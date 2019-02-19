@@ -12,43 +12,31 @@ import mcjty.mymod.tank.BlockTank;
 import mcjty.mymod.worldgen.BlockFancyOre;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 
 public class ModItems {
 
-    @GameRegistry.ObjectHolder("mymod:fancy_ingot")
+    @ObjectHolder("mymod:fancy_ingot")
     public static ItemFancyIngot itemFancyIngot;
 
-    @GameRegistry.ObjectHolder("mymod:wand")
+    @ObjectHolder("mymod:wand")
     public static ItemWand itemWand;
 
 
-    @SideOnly(Side.CLIENT)
-    public static void initModels() {
-        itemFancyIngot.initModel();
-        itemWand.initModel();
-    }
-
     public static void register(IForgeRegistry<Item> registry) {
-        registry.register(new ItemBlock(ModBlocks.blockFastFurnace).setRegistryName(BlockFastFurnace.FAST_FURNACE));
-        registry.register(new ItemBlock(ModBlocks.blockGenerator).setRegistryName(BlockGenerator.GENERATOR));
-        registry.register(new ItemBlock(ModBlocks.blockPuzzle).setRegistryName(BlockPuzzle.PUZZLE));
-        registry.register(new ItemBlock(ModBlocks.blockTank).setRegistryName(BlockTank.TANK));
-        registry.register(new ItemBlock(ModBlocks.blockFloader).setRegistryName(BlockFloader.FLOADER));
-        registry.register(new ItemBlock(ModBlocks.blockSuperchest).setRegistryName(BlockSuperchest.SUPERCHEST));
-        registry.register(new ItemBlock(ModBlocks.blockSuperchestPart).setRegistryName(BlockSuperchestPart.SUPERCHEST_PART));
-        registry.register(
-                new ItemBlock(ModBlocks.blockFancyOre) {
-                    @Override
-                    public int getMetadata(int damage) {
-                        return damage;
-                    }
-                }
-                        .setHasSubtypes(true)
-                        .setRegistryName(BlockFancyOre.FANCY_ORE));
+        registry.register(new ItemBlock(ModBlocks.blockFastFurnace, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFastFurnace.FAST_FURNACE));
+        registry.register(new ItemBlock(ModBlocks.blockGenerator, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockGenerator.GENERATOR));
+        registry.register(new ItemBlock(ModBlocks.blockPuzzle, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockPuzzle.PUZZLE));
+        registry.register(new ItemBlock(ModBlocks.blockTank, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockTank.TANK));
+        registry.register(new ItemBlock(ModBlocks.blockFloader, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFloader.FLOADER));
+        registry.register(new ItemBlock(ModBlocks.blockSuperchest, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockSuperchest.SUPERCHEST));
+        registry.register(new ItemBlock(ModBlocks.blockSuperchestPart, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockSuperchestPart.SUPERCHEST_PART));
+        registry.register(new ItemBlock(ModBlocks.blockFancyOreOverworld, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFancyOre.FANCY_ORE_OVERWORLD));
+        registry.register(new ItemBlock(ModBlocks.blockFancyOreNether, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFancyOre.FANCY_ORE_NETHER));
+        registry.register(new ItemBlock(ModBlocks.blockFancyOreEnd, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFancyOre.FANCY_ORE_END));
         registry.register(new ItemFancyIngot());
         registry.register(new ItemWand());
     }

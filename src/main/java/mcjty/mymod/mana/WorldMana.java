@@ -10,8 +10,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.world.storage.WorldSavedDataStorage;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.HashMap;
@@ -33,6 +33,7 @@ public class WorldMana extends WorldSavedData {
     }
 
     public static WorldMana get(World world) {
+//        WorldSavedDataStorage mapStorage = world.getMapStorage();
         MapStorage storage = world.getPerWorldStorage();
         WorldMana instance = (WorldMana) storage.getOrLoadData(WorldMana.class, NAME);
 

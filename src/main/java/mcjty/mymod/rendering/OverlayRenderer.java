@@ -6,7 +6,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class OverlayRenderer {
 
@@ -29,13 +29,13 @@ public class OverlayRenderer {
             return;
         }
 
-        if (Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem() != ModItems.itemWand) {
+        if (Minecraft.getInstance().player.getHeldItem(EnumHand.MAIN_HAND).getItem() != ModItems.itemWand) {
             return;
         }
 
         GlStateManager.disableLighting();
 
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
 
         int x = 200;
         int y = 10;

@@ -11,11 +11,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
 public class RenderSphere extends Render<EntitySphere> {
 
     private static ResourceLocation sphere = new ResourceLocation(MyMod.MODID, "textures/effects/sphere.png");
@@ -29,7 +26,7 @@ public class RenderSphere extends Render<EntitySphere> {
         GlStateManager.depthMask(false);
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float)x, (float)y, (float)z);
+        GlStateManager.translatef((float)x, (float)y, (float)z);
         rotateToPlayer();
 
         // ----------------------------------------
@@ -37,7 +34,7 @@ public class RenderSphere extends Render<EntitySphere> {
         this.bindTexture(sphere);
 
         GlStateManager.enableRescaleNormal();
-        GlStateManager.color(1.0f, 1.0f, 1.0f);
+        GlStateManager.color3f(1.0f, 1.0f, 1.0f);
 
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_ONE, GL11.GL_ONE);
@@ -63,9 +60,9 @@ public class RenderSphere extends Render<EntitySphere> {
     }
 
     private void rotateToPlayer() {
-        RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-        GlStateManager.rotate(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        RenderManager renderManager = Minecraft.getInstance().getRenderManager();
+        GlStateManager.rotatef(-renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotatef(renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
     }
 
 

@@ -1,5 +1,6 @@
 package mcjty.mymod.furnace;
 
+import mcjty.mymod.ModBlocks;
 import mcjty.mymod.config.FastFurnaceConfig;
 import mcjty.mymod.customrecipes.CustomRecipe;
 import mcjty.mymod.customrecipes.CustomRecipeRegistry;
@@ -11,7 +12,6 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -39,8 +40,12 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
     private int clientProgress = -1;
     private int clientEnergy = -1;
 
+    public TileFastFurnace() {
+        super(ModBlocks.TYPE_FAST_FURNACE);
+    }
+
     @Override
-    public void update() {
+    public void tick() {
         if (!world.isRemote) {
 
             if (energyStorage.getEnergyStored() < FastFurnaceConfig.RF_PER_TICK) {
@@ -108,7 +113,9 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
         if (recipe != null) {
             return recipe.getOutput();
         }
-        return FurnaceRecipes.instance().getSmeltingResult(stackInSlot);
+        // @todo 1.13
+        //return FurnaceRecipes.instance().getSmeltingResult(stackInSlot);
+        return ItemStack.EMPTY;
     }
 
     public int getProgress() {
@@ -142,7 +149,7 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
     @Override
     public NBTTagCompound getUpdateTag() {
         NBTTagCompound nbtTag = super.getUpdateTag();
-        nbtTag.setInteger("state", state.ordinal());
+        nbtTag.setInt("state", state.ordinal());
         return nbtTag;
     }
 
@@ -154,7 +161,7 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        int stateIndex = packet.getNbtCompound().getInteger("state");
+        int stateIndex = packet.getNbtCompound().getInt("state");
 
         if (world.isRemote && stateIndex != state.ordinal()) {
             state = FurnaceState.VALUES[stateIndex];
@@ -216,10 +223,10 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
     // ----------------------------------------------------------------------------------------
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
+    public void read(NBTTagCompound compound) {
+        super.read(compound);
         readRestorableFromNBT(compound);
-        state = FurnaceState.VALUES[compound.getInteger("state")];
+        state = FurnaceState.VALUES[compound.getInt("state")];
     }
 
     @Override
@@ -230,15 +237,15 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
         if (compound.hasKey("itemsOut")) {
             outputHandler.deserializeNBT((NBTTagCompound) compound.getTag("itemsOut"));
         }
-        progress = compound.getInteger("progress");
-        energyStorage.setEnergy(compound.getInteger("energy"));
+        progress = compound.getInt("progress");
+        energyStorage.setEnergy(compound.getInt("energy"));
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public NBTTagCompound write(NBTTagCompound compound) {
+        super.write(compound);
         writeRestorableToNBT(compound);
-        compound.setInteger("state", state.ordinal());
+        compound.setInt("state", state.ordinal());
         return compound;
     }
 
@@ -246,13 +253,13 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
     public void writeRestorableToNBT(NBTTagCompound compound) {
         compound.setTag("itemsIn", inputHandler.serializeNBT());
         compound.setTag("itemsOut", outputHandler.serializeNBT());
-        compound.setInteger("progress", progress);
-        compound.setInteger("energy", energyStorage.getEnergyStored());
+        compound.setInt("progress", progress);
+        compound.setInt("energy", energyStorage.getEnergyStored());
     }
 
     public boolean canInteractWith(EntityPlayer playerIn) {
         // If we are too far away from this tile entity you cannot use it
-        return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
+        return !isRemoved() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
     }
 
     @Override
@@ -265,30 +272,31 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
         return new GuiFastFurnace(this, new ContainerFastFurnace(player.inventory, this));
     }
 
+    @Nonnull
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return true;
+            return LazyOptional.of(() -> (T) combinedHandler);
         }
         if (capability == CapabilityEnergy.ENERGY) {
-            return true;
+            return LazyOptional.of(() -> (T) energyStorage);
         }
-        return super.hasCapability(capability, facing);
+        return super.getCapability(capability);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             if (facing == null) {
-                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(combinedHandler);
+                return LazyOptional.of(() -> (T) combinedHandler);
             } else if (facing == EnumFacing.UP) {
-                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inputHandler);
+                return LazyOptional.of(() -> (T) inputHandler);
             } else {
-                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(outputHandler);
+                return LazyOptional.of(() -> (T) outputHandler);
             }
         }
         if (capability == CapabilityEnergy.ENERGY) {
-            return CapabilityEnergy.ENERGY.cast(energyStorage);
+            return LazyOptional.of(() -> (T) energyStorage);
         }
         return super.getCapability(capability, facing);
     }

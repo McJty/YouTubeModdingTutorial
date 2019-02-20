@@ -1,19 +1,6 @@
 package mcjty.mymod.jei;
 
-import mcjty.mymod.ModLiquids;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
-
-class FloadRecipeWrapper implements ICraftingRecipeWrapper {
+class FloadRecipeWrapper {} /*implements ICraftingRecipeWrapper {
 
     public FloadRecipeWrapper() {
     }
@@ -33,3 +20,4 @@ class FloadRecipeWrapper implements ICraftingRecipeWrapper {
         return Collections.emptyList();
     }
 }
+*/

@@ -1,11 +1,11 @@
 package mcjty.mymod.worldgen;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.util.collection.IntObjectHashMap;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayDeque;
 import java.util.Random;
@@ -14,18 +14,18 @@ public class WorldTickHandler {
 
     public static WorldTickHandler instance = new WorldTickHandler();
 
-    public static TIntObjectHashMap<ArrayDeque<ChunkPos>> chunksToGen = new TIntObjectHashMap<>();
+    public static IntObjectHashMap<ArrayDeque<ChunkPos>> chunksToGen = new IntObjectHashMap<>();
 
     @SubscribeEvent
     public void tickEnd(TickEvent.WorldTickEvent event) {
-        if (event.side != Side.SERVER) {
+        if (event.side != LogicalSide.SERVER) {
             return;
         }
 
         if (event.phase == TickEvent.Phase.END) {
 
             World world = event.world;
-            int dim = world.provider.getDimension();
+            int dim = world.getDimension().getType().getId();
 
             ArrayDeque<ChunkPos> chunks = chunksToGen.get(dim);
 

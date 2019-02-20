@@ -7,17 +7,13 @@ import mcjty.mymod.floader.ContainerFloader;
 import mcjty.mymod.floader.TileFloader;
 import mcjty.mymod.furnace.ContainerFastFurnace;
 import mcjty.mymod.furnace.TileFastFurnace;
-import mezz.jei.api.*;
-import mezz.jei.api.recipe.IRecipeCategoryRegistration;
-import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
-import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 
-@JEIPlugin
-public class JeiPlugin implements IModPlugin {
+//@JEIPlugin
+public class JeiPlugin {} /*implements IModPlugin {
 
     public static final String FASTFURNACE_ID = "MyMod.FastFurnace";
     public static final String FLOADER_ID = "MyMod.Floader";
@@ -61,3 +57,4 @@ public class JeiPlugin implements IModPlugin {
     }
 
 }
+*/

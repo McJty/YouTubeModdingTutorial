@@ -1,7 +1,7 @@
 package mcjty.mymod.input;
 
 import mcjty.mymod.network.Messages;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 public class KeyInputHandler {

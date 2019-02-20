@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.*;
 
@@ -50,7 +50,7 @@ public class DamageTracker {
         float amount = event.getAmount();
         EntityLivingBase entity = event.getEntityLiving();
         World world = entity.world;
-        int dimension = world.provider.getDimension();
+        int dimension = world.getDimension().getType().getId();
         if (amount > 0 && tracking.containsKey(dimension)) {
             Map<BlockPos, Set<UUID>> dimensionTracking = tracking.get(dimension);
             for (Map.Entry<BlockPos, Set<UUID>> entry : dimensionTracking.entrySet()) {

@@ -63,6 +63,7 @@ public class ModBlocks {
     public static BlockSuperchestPart blockSuperchestPart;
 
     public static TileEntityType<?> TYPE_FLOADER;
+    public static TileEntityType<?> TYPE_FAST_FURNACE;
 
     @OnlyIn(Dist.CLIENT)
     public static void initModels() {
@@ -81,7 +82,7 @@ public class ModBlocks {
         registry.register(TileEntityType.Builder.create(TileFastFurnace::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "fast_furnace")));
         registry.register(TileEntityType.Builder.create(TileGenerator::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "generator")));
         registry.register(TileEntityType.Builder.create(TilePuzzle::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "puzzle")));
-        registry.register(TileEntityType.Builder.create(TileTank::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "tank")));
+        registry.register(TYPE_FAST_FURNACE = TileEntityType.Builder.create(TileTank::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "tank")));
         registry.register(TYPE_FLOADER = TileEntityType.Builder.create(TileFloader::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "floader")));
         registry.register(TileEntityType.Builder.create(TileSuperchest::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchest")));
         registry.register(TileEntityType.Builder.create(TileSuperchestPart::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchestpart")));

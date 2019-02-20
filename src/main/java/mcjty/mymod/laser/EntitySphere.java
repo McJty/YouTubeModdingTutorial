@@ -4,6 +4,7 @@ import mcjty.mymod.ModEntities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
@@ -44,6 +45,11 @@ public class EntitySphere extends Entity {
     }
 
     @Override
+    protected void registerData() {
+
+    }
+
+    @Override
     public void tick() {
         if (this.world.isRemote || this.world.isBlockLoaded(new BlockPos(this))) {
             super.tick();
@@ -63,7 +69,7 @@ public class EntitySphere extends Entity {
 
             if (this.isInWater()) {
                 for (int i = 0; i < 4; ++i) {
-                    this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+                    this.world.spawnParticle(Particles.BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
                 }
 
                 f = 0.8F;
@@ -77,7 +83,7 @@ public class EntitySphere extends Entity {
             this.motionZ *= f;
             this.setPosition(this.posX, this.posY, this.posZ);
         } else {
-            this.setDead();
+            this.remove();
         }
     }
 
@@ -87,41 +93,41 @@ public class EntitySphere extends Entity {
 
     protected void onImpact(RayTraceResult result) {
         if (!this.world.isRemote) {
-            if (result.entityHit != null) {
-                result.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.shootingEntity), 10.0F);
+            if (result.entity != null) {
+                result.entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.shootingEntity), 10.0F);
             }
-            this.setDead();
+            this.remove();
         }
     }
 
+
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
+    protected void writeAdditional(NBTTagCompound compound) {
         compound.setTag("direction", this.newDoubleNBTList(this.motionX, this.motionY, this.motionZ));
         compound.setTag("power", this.newDoubleNBTList(this.accelerationX, this.accelerationY, this.accelerationZ));
-        compound.setInteger("life", this.ticksAlive);
+        compound.setInt("life", this.ticksAlive);
     }
 
-    @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
-        if (compound.hasKey("power", 9)) {
-            NBTTagList nbttaglist = compound.getTagList("power", 6);
+    public void readAdditional(NBTTagCompound compound) {
+        if (compound.hasKey("power")) {
+            NBTTagList nbttaglist = compound.getList("power", 6);
 
-            if (nbttaglist.tagCount() == 3) {
-                this.accelerationX = nbttaglist.getDoubleAt(0);
-                this.accelerationY = nbttaglist.getDoubleAt(1);
-                this.accelerationZ = nbttaglist.getDoubleAt(2);
+            if (nbttaglist.size() == 3) {
+                this.accelerationX = nbttaglist.getDouble(0);
+                this.accelerationY = nbttaglist.getDouble(1);
+                this.accelerationZ = nbttaglist.getDouble(2);
             }
         }
 
-        this.ticksAlive = compound.getInteger("life");
+        this.ticksAlive = compound.getInt("life");
 
-        if (compound.hasKey("direction", 9) && compound.getTagList("direction", 6).tagCount() == 3) {
-            NBTTagList nbttaglist1 = compound.getTagList("direction", 6);
-            this.motionX = nbttaglist1.getDoubleAt(0);
-            this.motionY = nbttaglist1.getDoubleAt(1);
-            this.motionZ = nbttaglist1.getDoubleAt(2);
+        if (compound.hasKey("direction") && compound.getList("direction", 6).size() == 3) {
+            NBTTagList nbttaglist1 = compound.getList("direction", 6);
+            this.motionX = nbttaglist1.getDouble(0);
+            this.motionY = nbttaglist1.getDouble(1);
+            this.motionZ = nbttaglist1.getDouble(2);
         } else {
-            this.setDead();
+            this.remove();
         }
     }
 
@@ -137,7 +143,7 @@ public class EntitySphere extends Entity {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (this.isEntityInvulnerable(source)) {
+        if (this.isInvulnerableTo(source)) {
             return false;
         } else {
             this.markVelocityChanged();
@@ -171,7 +177,6 @@ public class EntitySphere extends Entity {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public int getBrightnessForRender() {
         return 15728880;
     }

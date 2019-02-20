@@ -5,38 +5,30 @@ import mcjty.mymod.items.ItemWand;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PacketToggleMode implements IMessage {
+import java.util.function.Supplier;
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
+public class PacketToggleMode  {
+
+    public PacketToggleMode(ByteBuf buf) {
     }
 
-    @Override
     public void toBytes(ByteBuf buf) {
     }
 
     public PacketToggleMode() {
     }
 
-    public static class Handler implements IMessageHandler<PacketToggleMode, IMessage> {
-        @Override
-        public IMessage onMessage(PacketToggleMode message, MessageContext ctx) {
-            FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
-            return null;
-        }
-
-        private void handle(PacketToggleMode message, MessageContext ctx) {
-            EntityPlayerMP playerEntity = ctx.getServerHandler().player;
+    public void handle(Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            EntityPlayerMP playerEntity = ctx.get().getSender();
             ItemStack heldItem = playerEntity.getHeldItem(EnumHand.MAIN_HAND);
             if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemWand) {
                 ItemWand wand = (ItemWand) (heldItem.getItem());
                 wand.toggleMode(playerEntity, heldItem);
             }
-        }
+
+        });
     }
 }

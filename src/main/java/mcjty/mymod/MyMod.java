@@ -59,7 +59,7 @@ public class MyMod {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     }
 
-    private static final Logger logger = LogManager.getLogger();
+    public static final Logger logger = LogManager.getLogger();
 
 
     private void setup(final FMLCommonSetupEvent event) {

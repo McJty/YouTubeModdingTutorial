@@ -7,6 +7,8 @@ import mcjty.mymod.MyMod;
 import mcjty.mymod.input.KeyBindings;
 import mcjty.mymod.input.KeyInputHandler;
 import mcjty.mymod.rendering.OverlayRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,7 +29,12 @@ public class ClientProxy implements IProxy {
         KeyBindings.init();
     }
 
-//    public IAnimationStateMachine load(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {
+    @Override
+    public EntityPlayer getClientPlayer() {
+        return Minecraft.getInstance().player;
+    }
+
+    //    public IAnimationStateMachine load(ResourceLocation location, ImmutableMap<String, ITimeValue> parameters) {
 //        return ModelLoaderRegistry.loadASM(location, parameters);
 //    }
 }

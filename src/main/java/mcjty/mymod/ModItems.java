@@ -27,16 +27,16 @@ public class ModItems {
 
 
     public static void register(IForgeRegistry<Item> registry) {
-        registry.register(new ItemBlock(ModBlocks.blockFastFurnace, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFastFurnace.FAST_FURNACE));
-        registry.register(new ItemBlock(ModBlocks.blockGenerator, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockGenerator.GENERATOR));
-        registry.register(new ItemBlock(ModBlocks.blockPuzzle, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockPuzzle.PUZZLE));
-        registry.register(new ItemBlock(ModBlocks.blockTank, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockTank.TANK));
-        registry.register(new ItemBlock(ModBlocks.blockFloader, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFloader.FLOADER));
-        registry.register(new ItemBlock(ModBlocks.blockSuperchest, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockSuperchest.SUPERCHEST));
-        registry.register(new ItemBlock(ModBlocks.blockSuperchestPart, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockSuperchestPart.SUPERCHEST_PART));
-        registry.register(new ItemBlock(ModBlocks.blockFancyOreOverworld, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFancyOre.FANCY_ORE_OVERWORLD));
-        registry.register(new ItemBlock(ModBlocks.blockFancyOreNether, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFancyOre.FANCY_ORE_NETHER));
-        registry.register(new ItemBlock(ModBlocks.blockFancyOreEnd, new Item.Properties().group(MyMod.creativeTab).addToolType(ToolType.PICKAXE, 1)).setRegistryName(BlockFancyOre.FANCY_ORE_END));
+        registry.register(new ItemBlock(ModBlocks.blockFastFurnace, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockFastFurnace.FAST_FURNACE));
+        registry.register(new ItemBlock(ModBlocks.blockGenerator, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockGenerator.GENERATOR));
+        registry.register(new ItemBlock(ModBlocks.blockPuzzle, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockPuzzle.PUZZLE));
+        registry.register(new ItemBlock(ModBlocks.blockTank, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockTank.TANK));
+        registry.register(new ItemBlock(ModBlocks.blockFloader, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockFloader.FLOADER));
+        registry.register(new ItemBlock(ModBlocks.blockSuperchest, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockSuperchest.SUPERCHEST));
+        registry.register(new ItemBlock(ModBlocks.blockSuperchestPart, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockSuperchestPart.SUPERCHEST_PART));
+        registry.register(new ItemBlock(ModBlocks.blockFancyOreOverworld, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockFancyOre.FANCY_ORE_OVERWORLD));
+        registry.register(new ItemBlock(ModBlocks.blockFancyOreNether, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockFancyOre.FANCY_ORE_NETHER));
+        registry.register(new ItemBlock(ModBlocks.blockFancyOreEnd, new Item.Properties().group(MyMod.creativeTab)).setRegistryName(BlockFancyOre.FANCY_ORE_END));
         registry.register(new ItemFancyIngot());
         registry.register(new ItemWand());
     }

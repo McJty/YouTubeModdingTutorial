@@ -47,8 +47,8 @@ public class ModBlocks {
     @ObjectHolder("mymod:puzzle")
     public static BlockPuzzle blockPuzzle;
 
-    @ObjectHolder("mymod:fload")
-    public static BlockFload blockFload;
+//    @ObjectHolder("mymod:fload")
+//    public static BlockFload blockFload;
 
     @ObjectHolder("mymod:tank")
     public static BlockTank blockTank;

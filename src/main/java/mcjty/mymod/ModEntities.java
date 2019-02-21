@@ -16,8 +16,12 @@ public class ModEntities {
     public static void register(IForgeRegistry<EntityType<?>> registry) {
         int id = 1;
 
-        registry.register(TYPE_GUARD = EntityType.Builder.create(EntityGuard.class, EntityGuard::new).build("mymod_guard"));
-        registry.register(TYPE_SPHERE = EntityType.Builder.create(EntitySphere.class, EntitySphere::new).build("mymod_sphere"));
+        TYPE_GUARD = EntityType.Builder.create(EntityGuard.class, EntityGuard::new).build("mymod_guard");
+        TYPE_GUARD.setRegistryName(MyMod.MODID, "mymod_guard");
+        registry.register(TYPE_GUARD);
+        TYPE_SPHERE = EntityType.Builder.create(EntitySphere.class, EntitySphere::new).build("mymod_sphere");
+        TYPE_SPHERE.setRegistryName(MyMod.MODID, "mymod_sphere");
+        registry.register(TYPE_SPHERE);
 //        EntityRegistry.registerModEntity(new ResourceLocation(MyMod.MODID, "mymod_guard"), EntityGuard.class, "mymod_guard", id++,
 //                MyMod.instance, 64, 3, true, 0x222222, 0x555555);
 //        EntityRegistry.registerModEntity(new ResourceLocation(MyMod.MODID, "mymod_sphere"), EntitySphere.class, "mymod_sphere", id++,

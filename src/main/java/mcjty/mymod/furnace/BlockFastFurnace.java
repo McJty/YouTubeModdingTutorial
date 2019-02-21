@@ -27,7 +27,7 @@ import java.util.List;
 
 public class BlockFastFurnace extends GenericBlock implements ITileEntityProvider {
 
-    public static final DirectionProperty FACING = DirectionProperty.create("facing");
+    public static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.values());
     public static final EnumProperty<FurnaceState> STATE = EnumProperty.<FurnaceState>create("state", FurnaceState.class);
 
 

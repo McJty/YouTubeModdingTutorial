@@ -32,5 +32,6 @@ public class PacketSendMana {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> OverlayRenderer.instance.setMana(mana, influence, playerMana));
+        ctx.get().setPacketHandled(true);
     }
 }

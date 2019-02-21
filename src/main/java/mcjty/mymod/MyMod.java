@@ -22,6 +22,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -84,7 +85,7 @@ public class MyMod {
             }
         }, () -> null);
 
-        ModEntities.init();
+//        ModEntities.init();
         ModLiquids.init();
 
         // @todo 1.13

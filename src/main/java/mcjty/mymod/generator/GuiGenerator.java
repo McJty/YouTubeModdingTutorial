@@ -34,9 +34,9 @@ public class GuiGenerator extends GuiContainer {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         renderHoveredToolTip(mouseX, mouseY);
 
         if (mouseX > guiLeft + 10 && mouseX < guiLeft + 112 && mouseY > guiTop + 5 && mouseY < guiTop + 15) {

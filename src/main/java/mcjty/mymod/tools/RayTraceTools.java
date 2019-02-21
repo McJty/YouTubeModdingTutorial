@@ -1,7 +1,5 @@
 package mcjty.mymod.tools;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
@@ -11,7 +9,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -29,11 +26,11 @@ public class RayTraceTools {
         double dist = beam.getDist();
         World world = beam.getWorld();
         EntityPlayer player = beam.getPlayer();
-        List<Entity> targets = world.getEntitiesInAABBexcluding(player, player.getEntityBoundingBox().expand(lookVec.x * dist, lookVec.y * dist, lookVec.z * dist).grow(1.0D, 1.0D, 1.0D),
-                Predicates.and(EntitySelectors.NOT_SPECTATING, ent -> ent != null && ent.canBeCollidedWith()));
+        List<Entity> targets = world.getEntitiesInAABBexcluding(player, player.getBoundingBox().expand(lookVec.x * dist, lookVec.y * dist, lookVec.z * dist).grow(1.0D, 1.0D, 1.0D),
+                EntitySelectors.NOT_SPECTATING.and(ent -> ent != null && ent.canBeCollidedWith()));
         List<Pair<Entity, Double>> hitTargets = new ArrayList<>();
         for (Entity target : targets) {
-            AxisAlignedBB targetBB = target.getEntityBoundingBox().grow(target.getCollisionBorderSize());
+            AxisAlignedBB targetBB = target.getBoundingBox().grow(target.getCollisionBorderSize());
             if (targetBB.contains(start)) {
                 hitTargets.add(Pair.of(target, 0.0));
             } else {
@@ -68,14 +65,14 @@ public class RayTraceTools {
         }
 
         private void calculate() {
-            start = this.player.getPositionEyes(1.0f);
+            start = this.player.getEyePosition(1.0f);
             lookVec = this.player.getLookVec();
             end = start.add(lookVec.x * this.maxDist, lookVec.y * this.maxDist, lookVec.z * this.maxDist);
 
             // Find out if there is a block blocking our beam
             RayTraceResult result = this.world.rayTraceBlocks(start, end);
             dist = this.maxDist;
-            if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+            if (result != null && result.type == RayTraceResult.Type.BLOCK) {
                 // Adjust our maximum distance
                 dist = result.hitVec.distanceTo(start);
                 end = start.add(lookVec.x * dist, lookVec.y * dist, lookVec.z * dist);

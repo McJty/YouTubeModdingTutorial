@@ -35,5 +35,6 @@ public class PacketSyncMachineState {
                 ((IMachineStateContainer) player.openContainer).sync(energy, progress);
             }
         });
+        ctx.get().setPacketHandled(true);
     }
 }

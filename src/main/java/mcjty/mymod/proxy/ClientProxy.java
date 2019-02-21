@@ -23,7 +23,7 @@ public class ClientProxy implements IProxy {
         OBJLoader.INSTANCE.addDomain(MyMod.MODID);
         MinecraftForge.EVENT_BUS.register(OverlayRenderer.instance);
         ModBlocks.initModels();
-        ModItems.initModels();
+//        ModItems.initModels();
         ModEntities.initModels();
         MinecraftForge.EVENT_BUS.register(new KeyInputHandler());
         KeyBindings.init();

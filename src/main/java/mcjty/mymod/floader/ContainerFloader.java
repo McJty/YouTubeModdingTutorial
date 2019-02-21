@@ -29,7 +29,7 @@ public class ContainerFloader extends Container {
             for (int col = 0; col < 9; ++col) {
                 int x = 10 + col * 18;
                 int y = row * 18 + 70;
-                this.addSlotToContainer(new Slot(playerInventory, col + row * 9 + 9, x, y));
+                this.addSlot(new Slot(playerInventory, col + row * 9 + 9, x, y));
             }
         }
 
@@ -37,17 +37,18 @@ public class ContainerFloader extends Container {
         for (int row = 0; row < 9; ++row) {
             int x = 10 + row * 18;
             int y = 58 + 70;
-            this.addSlotToContainer(new Slot(playerInventory, row, x, y));
+            this.addSlot(new Slot(playerInventory, row, x, y));
         }
     }
 
     private void addOwnSlots() {
-        IItemHandler itemHandler = this.te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        int x = 10;
-        int y = 26;
+        te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(itemHandler -> {
+            int x = 10;
+            int y = 26;
 
-        int slotIndex = 0;
-        addSlotToContainer(new SlotItemHandler(itemHandler, slotIndex, x, y));
+            int slotIndex = 0;
+            addSlot(new SlotItemHandler(itemHandler, slotIndex, x, y));
+        });
     }
 
     @Override

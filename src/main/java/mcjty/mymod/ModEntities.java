@@ -6,14 +6,14 @@ import mcjty.mymod.laser.EntitySphere;
 import mcjty.mymod.laser.RenderSphere;
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class ModEntities {
 
     public static EntityType<EntityGuard> TYPE_GUARD;
     public static EntityType<EntitySphere> TYPE_SPHERE;
 
-    public static void register(ForgeRegistry<EntityType<?>> registry) {
+    public static void register(IForgeRegistry<EntityType<?>> registry) {
         int id = 1;
 
         registry.register(TYPE_GUARD = EntityType.Builder.create(EntityGuard.class, EntityGuard::new).build("mymod_guard"));

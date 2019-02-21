@@ -62,8 +62,13 @@ public class ModBlocks {
     @ObjectHolder("mymod:superchest_part")
     public static BlockSuperchestPart blockSuperchestPart;
 
-    public static TileEntityType<?> TYPE_FLOADER;
     public static TileEntityType<?> TYPE_FAST_FURNACE;
+    public static TileEntityType<?> TYPE_GENERATOR;
+    public static TileEntityType<?> TYPE_PUZZLE;
+    public static TileEntityType<?> TYPE_TANK;
+    public static TileEntityType<?> TYPE_FLOADER;
+    public static TileEntityType<?> TYPE_SUPERCHEST;
+    public static TileEntityType<?> TYPE_SUPERCHEST_PART;
 
     @OnlyIn(Dist.CLIENT)
     public static void initModels() {
@@ -79,13 +84,13 @@ public class ModBlocks {
     }
 
     public static void registerTiles(IForgeRegistry<TileEntityType<?>> registry) {
-        registry.register(TileEntityType.Builder.create(TileFastFurnace::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "fast_furnace")));
-        registry.register(TileEntityType.Builder.create(TileGenerator::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "generator")));
-        registry.register(TileEntityType.Builder.create(TilePuzzle::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "puzzle")));
-        registry.register(TYPE_FAST_FURNACE = TileEntityType.Builder.create(TileTank::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "tank")));
+        registry.register(TYPE_FAST_FURNACE = TileEntityType.Builder.create(TileFastFurnace::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "fast_furnace")));
+        registry.register(TYPE_GENERATOR = TileEntityType.Builder.create(TileGenerator::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "generator")));
+        registry.register(TYPE_PUZZLE = TileEntityType.Builder.create(TilePuzzle::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "puzzle")));
+        registry.register(TYPE_TANK = TileEntityType.Builder.create(TileTank::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "tank")));
         registry.register(TYPE_FLOADER = TileEntityType.Builder.create(TileFloader::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "floader")));
-        registry.register(TileEntityType.Builder.create(TileSuperchest::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchest")));
-        registry.register(TileEntityType.Builder.create(TileSuperchestPart::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchestpart")));
+        registry.register(TYPE_SUPERCHEST = TileEntityType.Builder.create(TileSuperchest::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchest")));
+        registry.register(TYPE_SUPERCHEST_PART = TileEntityType.Builder.create(TileSuperchestPart::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "superchestpart")));
     }
 
     public static void register(IForgeRegistry<Block> registry) {
@@ -99,7 +104,7 @@ public class ModBlocks {
         registry.register(new BlockFancyOre(OreType.ORE_OVERWORLD, BlockFancyOre.FANCY_ORE_OVERWORLD));
         registry.register(new BlockFancyOre(OreType.ORE_NETHER, BlockFancyOre.FANCY_ORE_NETHER));
         registry.register(new BlockFancyOre(OreType.ORE_END, BlockFancyOre.FANCY_ORE_END));
-        registry.register(new BlockFload());
+//        registry.register(new BlockFload());
     }
 
 }

@@ -272,18 +272,6 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
         return new GuiFastFurnace(this, new ContainerFastFurnace(player.inventory, this));
     }
 
-    @Nonnull
-    @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return LazyOptional.of(() -> (T) combinedHandler);
-        }
-        if (capability == CapabilityEnergy.ENERGY) {
-            return LazyOptional.of(() -> (T) energyStorage);
-        }
-        return super.getCapability(capability);
-    }
-
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {

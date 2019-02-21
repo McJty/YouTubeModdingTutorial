@@ -6,6 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ import net.minecraft.util.EnumFacing;
 public class PuzzleTESR extends TileEntityRenderer<TilePuzzle> {
 
     @Override
-    public void render(TilePuzzle te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TilePuzzle te, double x, double y, double z, float partialTicks, int destroyStage) {
 
         IBlockState state = te.getWorld().getBlockState(te.getPos());
         Block block = state.getBlock();
@@ -22,15 +23,15 @@ public class PuzzleTESR extends TileEntityRenderer<TilePuzzle> {
             return;
         }
 
-        Minecraft.getMinecraft().entityRenderer.disableLightmap();
+        Minecraft.getInstance().entityRenderer.disableLightmap();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
+        GlStateManager.translatef((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
         setupRotation(state);
-        GlStateManager.translate(0F, 0F, 0.9F);
+        GlStateManager.translatef(0F, 0F, 0.9F);
 
         GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
+        GlStateManager.enableDepthTest();
 
         if (te.isSolved()) {
             renderSlotHilight();
@@ -38,17 +39,17 @@ public class PuzzleTESR extends TileEntityRenderer<TilePuzzle> {
         renderSlot(te);
 
         GlStateManager.popMatrix();
-        Minecraft.getMinecraft().entityRenderer.enableLightmap();
+        Minecraft.getInstance().entityRenderer.enableLightmap();
     }
 
     private void setupRotation(IBlockState state) {
-        EnumFacing facing = state.getValue(BlockPuzzle.FACING);
+        EnumFacing facing = state.get(BlockPuzzle.FACING);
         if (facing == EnumFacing.UP) {
-            GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.translate(0.0F, 0.0F, -0.68F);
+            GlStateManager.rotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.translatef(0.0F, 0.0F, -0.68F);
         } else if (facing == EnumFacing.DOWN) {
-            GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-            GlStateManager.translate(0.0F, 0.0F, -.184F);
+            GlStateManager.rotatef(90.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.translatef(0.0F, 0.0F, -.184F);
         } else {
             float rotY = 0.0F;
             if (facing == EnumFacing.NORTH) {
@@ -58,8 +59,8 @@ public class PuzzleTESR extends TileEntityRenderer<TilePuzzle> {
             } else if (facing == EnumFacing.EAST) {
                 rotY = -90.0F;
             }
-            GlStateManager.rotate(-rotY, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(0.0F, -0.2500F, -0.4375F);
+            GlStateManager.rotatef(-rotY, 0.0F, 1.0F, 0.0F);
+            GlStateManager.translatef(0.0F, -0.2500F, -0.4375F);
         }
     }
 
@@ -72,10 +73,10 @@ public class PuzzleTESR extends TileEntityRenderer<TilePuzzle> {
         RenderHelper.enableGUIStandardItemLighting();
         float factor = 4.0f;
         float f3 = 0.0075F;
-        GlStateManager.translate(-0.5F, 0.5F, -0.15F);
-        GlStateManager.scale(f3 * factor, -f3 * factor, 0.0001f);
+        GlStateManager.translatef(-0.5F, 0.5F, -0.15F);
+        GlStateManager.scalef(f3 * factor, -f3 * factor, 0.0001f);
 
-        RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+        ItemRenderer itemRender = Minecraft.getInstance().getItemRenderer();
         itemRender.renderItemAndEffectIntoGUI(stack, 8, 8);
 
         RenderHelper.enableStandardItemLighting();
@@ -86,8 +87,8 @@ public class PuzzleTESR extends TileEntityRenderer<TilePuzzle> {
 
         float factor = 4.0f;
         float f3 = 0.0075F;
-        GlStateManager.translate(-0.5F, 0.5F, -0.155F);
-        GlStateManager.scale(f3 * factor, -f3 * factor, f3);
+        GlStateManager.translatef(-0.5F, 0.5F, -0.155F);
+        GlStateManager.scalef(f3 * factor, -f3 * factor, f3);
         GlStateManager.disableLighting();
 
         Gui.drawRect(8-3, 8-3, 8 + 21, 8 + 21, 0x5566ff66);

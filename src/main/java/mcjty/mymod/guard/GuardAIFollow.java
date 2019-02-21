@@ -30,7 +30,7 @@ public class GuardAIFollow extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        List<EntityPlayer> list = this.entity.world.getEntitiesWithinAABB(EntityPlayer.class, this.entity.getEntityBoundingBox().grow((double) this.areaSize));
+        List<EntityPlayer> list = this.entity.world.getEntitiesWithinAABB(EntityPlayer.class, this.entity.getBoundingBox().grow((double) this.areaSize));
 
         for (EntityPlayer player : list) {
             if (!player.isInvisible()) {
@@ -61,8 +61,9 @@ public class GuardAIFollow extends EntityAIBase {
         this.entity.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
     }
 
+
     @Override
-    public void updateTask() {
+    public void tick() {
         if (this.followingPlayer != null && !this.entity.getLeashed()) {
             this.entity.getLookHelper().setLookPositionWithEntity(this.followingPlayer, 10.0F, (float) this.entity.getVerticalFaceSpeed());
 

@@ -22,12 +22,12 @@ public class TankTESR extends TileEntityRenderer<TileTank> {
     }
 
     @Override
-    public void render(TileTank tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileTank tileEntity, double x, double y, double z, float partialTicks, int destroyStage) {
         GlStateManager.pushMatrix();
         GlStateManager.disableRescaleNormal();
-        GlStateManager.color(1, 1, 1, 1);
+        GlStateManager.color4f(1, 1, 1, 1);
         GlStateManager.disableBlend();
-        GlStateManager.translate((float) x, (float) y, (float) z);
+        GlStateManager.translatef((float) x, (float) y, (float) z);
 
         bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         renderFluid(tileEntity);
@@ -56,11 +56,11 @@ public class TankTESR extends TileEntityRenderer<TileTank> {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder renderer = tessellator.getBuffer();
             ResourceLocation still = renderFluid.getStill();
-            TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(still.toString());
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureMap().getAtlasSprite(still.toString());
 
             net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
 
-            GlStateManager.color(1, 1, 1, .5f);
+            GlStateManager.color4f(1, 1, 1, .5f);
             renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
             float u1 = sprite.getMinU();

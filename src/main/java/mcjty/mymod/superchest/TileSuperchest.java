@@ -10,29 +10,33 @@ import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileSuperchest extends TileEntity implements IRestorableTileEntity, IGuiTile {
 
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-        return oldState.getBlock() != newState.getBlock();
+    public TileSuperchest() {
+        super(ModBlocks.TYPE_SUPERCHEST);
     }
 
+    // @todo 1.13
+//    @Override
+//    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+//        return oldState.getBlock() != newState.getBlock();
+//    }
+
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
+    public void read(NBTTagCompound compound) {
+        super.read(compound);
         readRestorableFromNBT(compound);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound write(NBTTagCompound compound) {
         writeRestorableToNBT(compound);
-        return super.writeToNBT(compound);
+        return super.write(compound);
     }
 
     @Override
@@ -49,7 +53,7 @@ public class TileSuperchest extends TileEntity implements IRestorableTileEntity,
 
     public boolean canInteractWith(EntityPlayer playerIn) {
         // If we are too far away from this tile entity you cannot use it
-        return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
+        return !isRemoved() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
     }
 
     @Override
@@ -74,27 +78,14 @@ public class TileSuperchest extends TileEntity implements IRestorableTileEntity,
     };
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
         IBlockState state = world.getBlockState(pos);
-        if (state.getBlock() != ModBlocks.blockSuperchest || state.getValue(BlockSuperchest.FORMED) == SuperchestPartIndex.UNFORMED) {
-            return false;
-        }
-
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        IBlockState state = world.getBlockState(pos);
-        if (state.getBlock() != ModBlocks.blockSuperchest || state.getValue(BlockSuperchest.FORMED) == SuperchestPartIndex.UNFORMED) {
+        if (state.getBlock() != ModBlocks.blockSuperchest || state.get(BlockSuperchest.FORMED) == SuperchestPartIndex.UNFORMED) {
             return null;
         }
 
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler);
+            return LazyOptional.of(() -> (T) itemHandler);
         }
         return super.getCapability(capability, facing);
     }

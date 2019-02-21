@@ -1,5 +1,6 @@
 package mcjty.mymod.tank;
 
+import mcjty.mymod.ModBlocks;
 import mcjty.mymod.tools.IRestorableTileEntity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,6 +9,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
@@ -16,6 +18,10 @@ import javax.annotation.Nullable;
 public class TileTank extends TileEntity implements IRestorableTileEntity {
 
     public static final int MAX_CONTENTS = 10000;       // 10 buckets
+
+    public TileTank() {
+        super(ModBlocks.TYPE_TANK);
+    }
 
     private FluidTank tank = new FluidTank(MAX_CONTENTS) {
         @Override
@@ -43,25 +49,25 @@ public class TileTank extends TileEntity implements IRestorableTileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        tank.readFromNBT(packet.getNbtCompound().getCompoundTag("tank"));
+        tank.readFromNBT(packet.getNbtCompound().getCompound("tank"));
     }
 
 
     @Override
-    public void readFromNBT(NBTTagCompound tagCompound) {
-        super.readFromNBT(tagCompound);
+    public void read(NBTTagCompound tagCompound) {
+        super.read(tagCompound);
         readRestorableFromNBT(tagCompound);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound write(NBTTagCompound compound) {
         writeRestorableToNBT(compound);
-        return super.writeToNBT(compound);
+        return super.write(compound);
     }
 
     @Override
     public void readRestorableFromNBT(NBTTagCompound compound) {
-        tank.readFromNBT(compound.getCompoundTag("tank"));
+        tank.readFromNBT(compound.getCompound("tank"));
     }
 
     @Override
@@ -76,17 +82,9 @@ public class TileTank extends TileEntity implements IRestorableTileEntity {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank);
+            return LazyOptional.of(() -> (T) tank);
         }
         return super.getCapability(capability, facing);
     }

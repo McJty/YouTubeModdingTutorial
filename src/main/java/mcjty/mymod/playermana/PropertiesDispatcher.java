@@ -4,20 +4,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class PropertiesDispatcher implements ICapabilitySerializable<NBTTagCompound> {
 
     private PlayerMana playerMana = new PlayerMana();
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        return capability == PlayerProperties.PLAYER_MANA;
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == PlayerProperties.PLAYER_MANA) {
-            return (T) playerMana;
+            return LazyOptional.of(() -> (T) playerMana);
         }
         return null;
     }

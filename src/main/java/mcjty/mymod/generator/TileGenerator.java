@@ -1,7 +1,6 @@
 package mcjty.mymod.generator;
 
-import com.google.common.collect.ImmutableMap;
-import mcjty.mymod.MyMod;
+import mcjty.mymod.ModBlocks;
 import mcjty.mymod.config.GeneratorConfig;
 import mcjty.mymod.tools.IGuiTile;
 import mcjty.mymod.tools.IRestorableTileEntity;
@@ -14,15 +13,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.model.animation.CapabilityAnimation;
-import net.minecraftforge.common.model.animation.IAnimationStateMachine;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class TileGenerator extends TileEntity implements ITickable, IRestorableTileEntity, IGuiTile {
@@ -32,11 +28,13 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     private int clientEnergy = -1;
 
 
-    @Nullable
-    private final IAnimationStateMachine asm;
+//    @Nullable
+//    private final IAnimationStateMachine asm;
 
     public TileGenerator() {
-        asm = MyMod.proxy.load(new ResourceLocation(MyMod.MODID, "asms/block/generator.json"), ImmutableMap.of());
+        super(ModBlocks.TYPE_GENERATOR);
+        // @todo 1.13
+//        asm = MyMod.proxy.load(new ResourceLocation(MyMod.MODID, "asms/block/generator.json"), ImmutableMap.of());
     }
 
     // ----------------------------------------------------------------------------------------
@@ -46,7 +44,7 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     // ----------------------------------------------------------------------------------------
 
     @Override
-    public void update() {
+    public void tick() {
         if (!world.isRemote) {
             trackCounter--;
             if (trackCounter <= 0) {
@@ -59,23 +57,29 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     }
 
     @Override
-    public void invalidate() {
-        super.invalidate();
-        DamageTracker.instance.remove(world.provider.getDimension(), pos);
+    public void remove() {
+        super.remove();
+        DamageTracker.instance.remove(world.getDimension().getType(), pos);
     }
 
     private void sendEnergy() {
         if (energyStorage.getEnergyStored() > 0) {
-            for (EnumFacing facing : EnumFacing.VALUES) {
+            for (EnumFacing facing : EnumFacing.values()) {
                 TileEntity tileEntity = world.getTileEntity(pos.offset(facing));
-                if (tileEntity != null && tileEntity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                    IEnergyStorage handler = tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
-                    if (handler != null && handler.canReceive()) {
-                        int accepted = handler.receiveEnergy(energyStorage.getEnergyStored(), false);
-                        energyStorage.consumePower(accepted);
-                        if (energyStorage.getEnergyStored() <= 0) {
-                            break;
-                        }
+                if (tileEntity != null) {
+                    if (
+                            tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite())
+                                    .map(handler -> {
+                                        if (handler.canReceive()) {
+                                            int accepted = handler.receiveEnergy(energyStorage.getEnergyStored(), false);
+                                            energyStorage.consumePower(accepted);
+                                            if (energyStorage.getEnergyStored() <= 0) {
+                                                return true;
+                                            }
+                                        }
+                                        return false;
+                                    }).orElse(false)) {
+                        break;
                     }
                 }
             }
@@ -96,11 +100,11 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     }
 
     private void findEntities() {
-        DamageTracker.instance.clear(world.provider.getDimension(), pos);
+        DamageTracker.instance.clear(world.getDimension().getType(), pos);
 
         List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, getTrackingBox());
         for (EntityLivingBase entity : entities) {
-            DamageTracker.instance.register(world.provider.getDimension(), pos, entity.getUniqueID());
+            DamageTracker.instance.register(world.getDimension().getType(), pos, entity.getUniqueID());
         }
     }
 
@@ -122,24 +126,24 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     // ----------------------------------------------------------------------------------------
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
+    public void read(NBTTagCompound compound) {
+        super.read(compound);
         readRestorableFromNBT(compound);
     }
 
     public void readRestorableFromNBT(NBTTagCompound compound) {
-        energyStorage.setEnergy(compound.getInteger("energy"));
+        energyStorage.setEnergy(compound.getInt("energy"));
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public NBTTagCompound write(NBTTagCompound compound) {
+        super.write(compound);
         writeRestorableToNBT(compound);
         return compound;
     }
 
     public void writeRestorableToNBT(NBTTagCompound compound) {
-        compound.setInteger("energy", energyStorage.getEnergyStored());
+        compound.setInt("energy", energyStorage.getEnergyStored());
     }
 
     @Override
@@ -154,7 +158,7 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
 
     public boolean canInteractWith(EntityPlayer playerIn) {
         // If we are too far away from this tile entity you cannot use it
-        return !isInvalid() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
+        return !isRemoved() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
     }
 
 
@@ -164,24 +168,13 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
-            return true;
+            return LazyOptional.of(() -> (T) energyStorage);
         }
-        if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY) {
-            return CapabilityEnergy.ENERGY.cast(energyStorage);
-        }
-        if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) {
-            return CapabilityAnimation.ANIMATION_CAPABILITY.cast(asm);
-        }
+//        if (capability == CapabilityAnimation.ANIMATION_CAPABILITY) {
+//            return LazyOptional.of(() -> (T) asm);
+//        }
         return super.getCapability(capability, facing);
     }
 

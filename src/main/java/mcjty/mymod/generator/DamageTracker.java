@@ -4,6 +4,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -19,26 +20,26 @@ public class DamageTracker {
         tracking.clear();
     }
 
-    public void register(Integer dimension, BlockPos pos, UUID entity) {
-        if (!tracking.containsKey(dimension)) {
-            tracking.put(dimension, new HashMap<>());
+    public void register(DimensionType dimension, BlockPos pos, UUID entity) {
+        if (!tracking.containsKey(dimension.getId())) {
+            tracking.put(dimension.getId(), new HashMap<>());
         }
-        Map<BlockPos, Set<UUID>> dimensionTracking = tracking.get(dimension);
+        Map<BlockPos, Set<UUID>> dimensionTracking = tracking.get(dimension.getId());
         if (!dimensionTracking.containsKey(pos)) {
             dimensionTracking.put(pos, new HashSet<>());
         }
         dimensionTracking.get(pos).add(entity);
     }
 
-    public void remove(Integer dimension, BlockPos pos) {
-        if (tracking.containsKey(dimension)) {
-            tracking.get(dimension).remove(pos);
+    public void remove(DimensionType dimension, BlockPos pos) {
+        if (tracking.containsKey(dimension.getId())) {
+            tracking.get(dimension.getId()).remove(pos);
         }
     }
 
-    public void clear(Integer dimension, BlockPos pos) {
-        if (tracking.containsKey(dimension)) {
-            Map<BlockPos, Set<UUID>> dimensionTracking = tracking.get(dimension);
+    public void clear(DimensionType dimension, BlockPos pos) {
+        if (tracking.containsKey(dimension.getId())) {
+            Map<BlockPos, Set<UUID>> dimensionTracking = tracking.get(dimension.getId());
             if (dimensionTracking.containsKey(pos)) {
                 dimensionTracking.get(pos).clear();
             }

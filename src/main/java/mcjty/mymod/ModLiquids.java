@@ -10,8 +10,9 @@ public class ModLiquids {
     public static final Fluid fload = new LiquidFload();
 
     public static void init() {
-        FluidRegistry.registerFluid(fload);
-        FluidRegistry.addBucketForFluid(fload);
+        // @todo 1.13
+//        FluidRegistry.registerFluid(fload);
+//        FluidRegistry.addBucketForFluid(fload);
     }
 
     public static boolean isValidFloadStack(FluidStack stack){

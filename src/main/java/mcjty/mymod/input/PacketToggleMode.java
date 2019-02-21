@@ -28,7 +28,7 @@ public class PacketToggleMode  {
                 ItemWand wand = (ItemWand) (heldItem.getItem());
                 wand.toggleMode(playerEntity, heldItem);
             }
-
         });
+        ctx.get().setPacketHandled(true);
     }
 }

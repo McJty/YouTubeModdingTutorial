@@ -70,19 +70,6 @@ public class ModBlocks {
     public static TileEntityType<?> TYPE_SUPERCHEST;
     public static TileEntityType<?> TYPE_SUPERCHEST_PART;
 
-    @OnlyIn(Dist.CLIENT)
-    public static void initModels() {
-//        blockFastFurnace.initModel();
-//        blockGenerator.initModel();
-//        blockFancyOre.initModel();
-//        blockPuzzle.initModel();
-//        blockFload.initModel();
-//        blockTank.initModel();
-//        blockFloader.initModel();
-//        blockSuperchest.initModel();
-//        blockSuperchestPart.initModel();
-    }
-
     public static void registerTiles(IForgeRegistry<TileEntityType<?>> registry) {
         registry.register(TYPE_FAST_FURNACE = TileEntityType.Builder.create(TileFastFurnace::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "fast_furnace")));
         registry.register(TYPE_GENERATOR = TileEntityType.Builder.create(TileGenerator::new).build(null).setRegistryName(new ResourceLocation(MyMod.MODID, "generator")));

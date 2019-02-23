@@ -16,7 +16,7 @@ public class PlayerPropertyEvents {
     public void onEntityConstructing(AttachCapabilitiesEvent<Entity> event){
         if (event.getObject() instanceof EntityPlayer) {
             if (!event.getObject().getCapability(PlayerProperties.PLAYER_MANA).isPresent()) {
-                event.addCapability(new ResourceLocation(MyMod.MODID, "Mana"), new PropertiesDispatcher());
+                event.addCapability(new ResourceLocation(MyMod.MODID, "mana"), new PropertiesDispatcher());
             }
         }
     }

@@ -63,7 +63,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.13.2-25.0.44'
+    minecraft 'net.minecraftforge:forge:1.13.2-25.0.48'
 
 
     // compile against the JEI API but do not include it at runtime

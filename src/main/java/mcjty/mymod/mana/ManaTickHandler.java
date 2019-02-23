@@ -10,10 +10,11 @@ public class ManaTickHandler {
 
     @SubscribeEvent
     public void onWorldTick(TickEvent.WorldTickEvent evt) {
-        if (evt.phase == TickEvent.Phase.START) {
-            return;
-        }
-        World world = evt.world;
-        WorldMana.get(world).tick(world);
+        // @todo 1.13
+//        if (evt.phase == TickEvent.Phase.START) {
+//            return;
+//        }
+//        World world = evt.world;
+//        WorldMana.get(world).tick(world);
     }
 }

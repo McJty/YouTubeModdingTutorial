@@ -122,10 +122,10 @@ public class TileFloader extends TileEntity implements ITickable, IRestorableTil
         return !isRemoved() && playerIn.getDistanceSq(pos.add(0.5D, 0.5D, 0.5D)) <= 64D;
     }
 
-    @Override
-    public Container createContainer(EntityPlayer player) {
-        return new ContainerFloader(player.inventory, this);
-    }
+//    @Override
+//    public Container createContainer(EntityPlayer player) {
+//        return new ContainerFloader(player.inventory, this);
+//    }
 
     @Override
     public GuiContainer createGui(EntityPlayer player) {

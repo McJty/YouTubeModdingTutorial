@@ -6,6 +6,7 @@ import mcjty.mymod.network.Messages;
 import mcjty.mymod.playermana.PlayerMana;
 import mcjty.mymod.playermana.PlayerPropertyEvents;
 import mcjty.mymod.proxy.ClientProxy;
+import mcjty.mymod.proxy.GuiHandler;
 import mcjty.mymod.proxy.IProxy;
 import mcjty.mymod.proxy.ServerProxy;
 import mcjty.mymod.worldgen.WorldTickHandler;
@@ -25,6 +26,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -58,6 +61,8 @@ public class MyMod {
         FluidRegistry.enableUniversalBucket();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+
+        ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.GUIFACTORY, () -> GuiHandler::getClientGuiElement);
     }
 
     public static final Logger logger = LogManager.getLogger();

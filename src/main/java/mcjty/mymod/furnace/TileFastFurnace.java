@@ -10,6 +10,7 @@ import mcjty.mymod.tools.MyEnergyStorage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +19,9 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.IInteractionObject;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -28,7 +32,7 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileFastFurnace extends TileEntity implements ITickable, IRestorableTileEntity, IGuiTile {
+public class TileFastFurnace extends TileEntity implements ITickable, IRestorableTileEntity, IGuiTile, IInteractionObject {
 
     public static final int INPUT_SLOTS = 3;
     public static final int OUTPUT_SLOTS = 3;
@@ -263,14 +267,45 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
     }
 
     @Override
-    public Container createContainer(EntityPlayer player) {
-        return new ContainerFastFurnace(player.inventory, this);
-    }
-
-    @Override
     public GuiContainer createGui(EntityPlayer player) {
         return new GuiFastFurnace(this, new ContainerFastFurnace(player.inventory, this));
     }
+
+    @Override
+    public Container createContainer(InventoryPlayer inventoryPlayer, EntityPlayer player) {
+        return new ContainerFastFurnace(inventoryPlayer, this);
+    }
+
+    @Override
+    public String getGuiID() {
+        return "mymod:fast_furnace";
+    }
+
+    @Override
+    public ITextComponent getName() {
+        return new TextComponentString("Fast Furnace GUI");
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public ITextComponent getCustomName() {
+        return null;
+    }
+
+//    @Override
+//    public Container createContainer(EntityPlayer player) {
+//        return new ContainerFastFurnace(player.inventory, this);
+//    }
+//
+//    @Override
+//    public GuiContainer createGui(EntityPlayer player) {
+//        return new GuiFastFurnace(this, new ContainerFastFurnace(player.inventory, this));
+//    }
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {

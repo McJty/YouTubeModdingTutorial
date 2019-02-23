@@ -146,10 +146,10 @@ public class TileGenerator extends TileEntity implements ITickable, IRestorableT
         compound.setInt("energy", energyStorage.getEnergyStored());
     }
 
-    @Override
-    public Container createContainer(EntityPlayer player) {
-        return new ContainerGenerator(player.inventory, this);
-    }
+//    @Override
+//    public Container createContainer(EntityPlayer player) {
+//        return new ContainerGenerator(player.inventory, this);
+//    }
 
     @Override
     public GuiContainer createGui(EntityPlayer player) {

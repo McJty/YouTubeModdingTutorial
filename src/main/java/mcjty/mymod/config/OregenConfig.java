@@ -1,37 +1,55 @@
 package mcjty.mymod.config;
 
-import mcjty.mymod.MyMod;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-//@Config(modid = MyMod.MODID, category = "oregen")
 public class OregenConfig {
 
-//    @Config.Comment(value = "Enable retrogen")
-    public static boolean RETROGEN = true;
+    public static ForgeConfigSpec.BooleanValue RETROGEN;
+    public static ForgeConfigSpec.BooleanValue VERBOSE;
+    public static ForgeConfigSpec.BooleanValue GENERATE_OVERWORLD;
+    public static ForgeConfigSpec.BooleanValue GENERATE_NETHER;
+    public static ForgeConfigSpec.BooleanValue GENERATE_END;
 
-//    @Config.Comment(value = "Enable verbose logging for retrogen")
-    public static boolean VERBOSE = false;
+    public static ForgeConfigSpec.IntValue MIN_VEIN_SIZE;
+    public static ForgeConfigSpec.IntValue MAX_VEIN_SIZE;
+    public static ForgeConfigSpec.IntValue CHANCES_TO_SPAWN;
+    public static ForgeConfigSpec.IntValue MIN_Y;
+    public static ForgeConfigSpec.IntValue MAX_Y;
 
-//    @Config.Comment(value = "Generate ore in the overworld")
-    public static boolean GENERATE_OVERWORLD = true;
+    public static void init(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+        SERVER_BUILDER.comment("Oregen");
+//        CLIENT_BUILDER.comment("Oregen");
 
-//    @Config.Comment(value = "Generate ore in the nether")
-    public static boolean GENERATE_NETHER = true;
+        RETROGEN = SERVER_BUILDER
+                .comment("Enable retrogen")
+                .define("oregen.retrogen", true);
+        VERBOSE = SERVER_BUILDER
+                .comment("Enable verbose logging for retrogen")
+                .define("oregen.verbose", false);
+        GENERATE_OVERWORLD = SERVER_BUILDER
+                .comment("Generate ore in the overworld")
+                .define("oregen.generateOverworld", true);
+        GENERATE_NETHER = SERVER_BUILDER
+                .comment("Generate ore in the nether")
+                .define("oregen.generateNether", true);
+        GENERATE_END = SERVER_BUILDER
+                .comment("Generate ore in the end")
+                .define("oregen.generateEnd", true);
 
-//    @Config.Comment(value = "Generate ore in the end")
-    public static boolean GENERATE_END = true;
-
-//    @Config.Comment(value = "Minimum size of every ore vein")
-    public static int MIN_VEIN_SIZE = 4;
-
-//    @Config.Comment(value = "Maximum size of every ore vein")
-    public static int MAX_VEIN_SIZE = 8;
-
-//    @Config.Comment(value = "Maximum veins per chunk")
-    public static int CHANCES_TO_SPAWN = 9;
-
-//    @Config.Comment(value = "Minimum height for the ore")
-    public static int MIN_Y = 2;
-
-//    @Config.Comment(value = "Maximum height for the ore")
-    public static int MAX_Y = 50;
+        MIN_VEIN_SIZE = SERVER_BUILDER
+                .comment("Minimum size of every ore vein")
+                .defineInRange("oregen.minVeinSize", 4, 0, 500);
+        MAX_VEIN_SIZE = SERVER_BUILDER
+                .comment("Maximum size of every ore vein")
+                .defineInRange("oregen.maxVeinSize", 8, 0, 500);
+        CHANCES_TO_SPAWN = SERVER_BUILDER
+                .comment("Maximum veins per chunk")
+                .defineInRange("oregen.chancesToSpawn", 9, 0, 1000000000);
+        MIN_Y = SERVER_BUILDER
+                .comment("Minimum height for the ore")
+                .defineInRange("oregen.minY", 2, 1, 256);
+        MAX_Y = SERVER_BUILDER
+                .comment("Maximum height for the ore")
+                .defineInRange("oregen.maxY", 50, 1, 256);
+    }
 }

@@ -51,7 +51,7 @@ public class GuiFastFurnace extends GuiContainer {
 
     private void drawEnergyBar(int energy) {
         drawRect(guiLeft + 10, guiTop + 5, guiLeft + 112, guiTop + 15, 0xff555555);
-        int percentage = energy * 100 / FastFurnaceConfig.MAX_POWER;
+        int percentage = energy * 100 / FastFurnaceConfig.MAX_POWER.get();
         for (int i = 0 ; i < percentage ; i++) {
             drawVerticalLine(guiLeft + 10 + 1 + i, guiTop + 5, guiTop + 14, i % 2 == 0 ? 0xffff0000 : 0xff000000);
         }

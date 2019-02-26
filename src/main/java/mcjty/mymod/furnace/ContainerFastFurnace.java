@@ -114,7 +114,7 @@ public class ContainerFastFurnace extends Container implements IMachineStateCont
                 for (IContainerListener listener : listeners) {
                     if (listener instanceof EntityPlayerMP) {
                         EntityPlayerMP player = (EntityPlayerMP) listener;
-                        int pct = 100 - te.getProgress() * 100 / FastFurnaceConfig.MAX_PROGRESS;
+                        int pct = 100 - te.getProgress() * 100 / FastFurnaceConfig.MAX_PROGRESS.get();
                         Messages.INSTANCE.sendTo(new PacketSyncMachineState(te.getEnergy(), pct), player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
                     }
                 }

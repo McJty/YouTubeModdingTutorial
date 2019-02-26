@@ -30,24 +30,24 @@ public class OreGenerator implements IWorldGenerator {
     }
 
     public void generateWorld(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
-        if (!newGen && !OregenConfig.RETROGEN) {
+        if (!newGen && !OregenConfig.RETROGEN.get()) {
             return;
         }
 
         if (world.getDimension().getType() == DimensionType.OVERWORLD) {
-            if (OregenConfig.GENERATE_OVERWORLD) {
+            if (OregenConfig.GENERATE_OVERWORLD.get()) {
                 addOreSpawn(ModBlocks.blockFancyOreOverworld, (byte) OreType.ORE_OVERWORLD.ordinal(), Blocks.STONE, world, random, chunkX * 16, chunkZ * 16,
-                        OregenConfig.MIN_VEIN_SIZE, OregenConfig.MAX_VEIN_SIZE, OregenConfig.CHANCES_TO_SPAWN, OregenConfig.MIN_Y, OregenConfig.MAX_Y);
+                        OregenConfig.MIN_VEIN_SIZE.get(), OregenConfig.MAX_VEIN_SIZE.get(), OregenConfig.CHANCES_TO_SPAWN.get(), OregenConfig.MIN_Y.get(), OregenConfig.MAX_Y.get());
             }
         } else if (world.getDimension().getType() == DimensionType.NETHER) {
-            if (OregenConfig.GENERATE_NETHER) {
+            if (OregenConfig.GENERATE_NETHER.get()) {
                 addOreSpawn(ModBlocks.blockFancyOreNether, (byte) OreType.ORE_NETHER.ordinal(), Blocks.NETHERRACK, world, random, chunkX * 16, chunkZ * 16,
-                        OregenConfig.MIN_VEIN_SIZE, OregenConfig.MAX_VEIN_SIZE, OregenConfig.CHANCES_TO_SPAWN, OregenConfig.MIN_Y, OregenConfig.MAX_Y);
+                        OregenConfig.MIN_VEIN_SIZE.get(), OregenConfig.MAX_VEIN_SIZE.get(), OregenConfig.CHANCES_TO_SPAWN.get(), OregenConfig.MIN_Y.get(), OregenConfig.MAX_Y.get());
             }
         } else if (world.getDimension().getType() == DimensionType.THE_END) {
-            if (OregenConfig.GENERATE_END) {
+            if (OregenConfig.GENERATE_END.get()) {
                 addOreSpawn(ModBlocks.blockFancyOreEnd, (byte) OreType.ORE_END.ordinal(), Blocks.END_STONE, world, random, chunkX * 16, chunkZ * 16,
-                        OregenConfig.MIN_VEIN_SIZE, OregenConfig.MAX_VEIN_SIZE, OregenConfig.CHANCES_TO_SPAWN, OregenConfig.MIN_Y, OregenConfig.MAX_Y);
+                        OregenConfig.MIN_VEIN_SIZE.get(), OregenConfig.MAX_VEIN_SIZE.get(), OregenConfig.CHANCES_TO_SPAWN.get(), OregenConfig.MIN_Y.get(), OregenConfig.MAX_Y.get());
             }
         }
 
@@ -87,15 +87,15 @@ public class OreGenerator implements IWorldGenerator {
         ChunkPos coord = event.getChunk().getPos();
 
         if (tag != null) {
-            boolean generated = OregenConfig.RETROGEN && !tag.hasKey("generated");
+            boolean generated = OregenConfig.RETROGEN .get()&& !tag.hasKey("generated");
             if (generated) {
-                if (OregenConfig.VERBOSE) {
+                if (OregenConfig.VERBOSE.get()) {
                     MyMod.logger.log(Level.DEBUG, "Queuing Retrogen for chunk: " + coord.toString() + ".");
                 }
                 regen = true;
             }
         } else {
-            regen = OregenConfig.RETROGEN;
+            regen = OregenConfig.RETROGEN.get();
         }
 
         if (regen) {

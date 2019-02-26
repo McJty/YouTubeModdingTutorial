@@ -1,15 +1,22 @@
 package mcjty.mymod.config;
 
-import mcjty.mymod.MyMod;
-//import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-// @todo 1.13
-//@Config(modid = MyMod.MODID, category = "generator")
 public class GeneratorConfig {
 
-//    @Config.Comment(value = "Maximum amount of power for the generator")
-    public static int MAX_POWER = 100000;
+    public static ForgeConfigSpec.IntValue MAX_POWER;
+    public static ForgeConfigSpec.DoubleValue POWER_DAMAGE_FACTOR;
 
-//    @Config.Comment(value = "Factor to control how much power is generated per damage unit")
-    public static float POWER_DAMAGE_FACTOR = 5.0f;
+    public static void init(ForgeConfigSpec.Builder SERVER_BUILDER, ForgeConfigSpec.Builder CLIENT_BUILDER) {
+        SERVER_BUILDER.comment("Generator");
+//        CLIENT_BUILDER.comment("Generator");
+
+        MAX_POWER = SERVER_BUILDER
+                .comment("Maximum amount of power for the generator")
+                .defineInRange("generator.maxPower", 100000, 1, 1000000000);
+        POWER_DAMAGE_FACTOR = SERVER_BUILDER
+                .comment("Factor to control how much power is generated per damage unit")
+                .defineInRange("generator.powerDamageFactor", 5.0, 0.0001, 1000000000);
+
+    }
 }

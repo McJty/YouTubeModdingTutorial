@@ -52,14 +52,14 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
     public void tick() {
         if (!world.isRemote) {
 
-            if (energyStorage.getEnergyStored() < FastFurnaceConfig.RF_PER_TICK) {
+            if (energyStorage.getEnergyStored() < FastFurnaceConfig.RF_PER_TICK.get()) {
                 setState(FurnaceState.NOPOWER);
                 return;
             }
 
             if (progress > 0) {
                 setState(FurnaceState.WORKING);
-                energyStorage.consumePower(FastFurnaceConfig.RF_PER_TICK);
+                energyStorage.consumePower(FastFurnaceConfig.RF_PER_TICK.get());
                 progress--;
                 if (progress <= 0) {
                     attemptSmelt();
@@ -88,7 +88,7 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
             if (!result.isEmpty()) {
                 if (insertOutput(result.copy(), true)) {
                     setState(FurnaceState.WORKING);
-                    progress = FastFurnaceConfig.MAX_PROGRESS;
+                    progress = FastFurnaceConfig.MAX_PROGRESS.get();
                     markDirty();
                     return;
                 }
@@ -222,7 +222,7 @@ public class TileFastFurnace extends TileEntity implements ITickable, IRestorabl
 
     // ----------------------------------------------------------------------------------------
 
-    private MyEnergyStorage energyStorage = new MyEnergyStorage(FastFurnaceConfig.MAX_POWER, FastFurnaceConfig.RF_PER_TICK_INPUT);
+    private MyEnergyStorage energyStorage = new MyEnergyStorage(FastFurnaceConfig.MAX_POWER.get(), FastFurnaceConfig.RF_PER_TICK_INPUT.get());
 
     // ----------------------------------------------------------------------------------------
 

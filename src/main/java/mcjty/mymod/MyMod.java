@@ -106,8 +106,7 @@ public class MyMod {
 
         // @todo 1.13
 //        GameRegistry.addSmelting(ModBlocks.blockFancyOre, new ItemStack(ModItems.itemFancyIngot, 1), 0.5f);
-//        OreDictionary.registerOre("oreFancy", ModBlocks.blockFancyOre);
-        
+
 
         proxy.setup(event);
     }

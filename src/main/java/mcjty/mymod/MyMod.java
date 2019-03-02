@@ -79,10 +79,9 @@ public class MyMod {
 
     private void setup(final FMLCommonSetupEvent event) {
         Messages.registerMessages("mymod");
-        // @todo 1.13
-//        GameRegistry.registerWorldGenerator(OreGenerator.instance, 5);
 
-//        MinecraftForge.EVENT_BUS.register(OreGenerator.instance);
+        OreGenerator.setupOregen();
+
         MinecraftForge.EVENT_BUS.register(ManaTickHandler.instance);
         MinecraftForge.EVENT_BUS.register(PlayerPropertyEvents.instance);
 
@@ -103,13 +102,12 @@ public class MyMod {
         ModLiquids.init();
 
         // @todo 1.13
-//        NetworkRegistry.INSTANCE.registerGuiHandler(MyMod.instance, new GuiHandler());
-        MinecraftForge.EVENT_BUS.register(WorldTickHandler.instance);
         MinecraftForge.EVENT_BUS.register(DamageTracker.instance);
 
         // @todo 1.13
 //        GameRegistry.addSmelting(ModBlocks.blockFancyOre, new ItemStack(ModItems.itemFancyIngot, 1), 0.5f);
 //        OreDictionary.registerOre("oreFancy", ModBlocks.blockFancyOre);
+        
 
         proxy.setup(event);
     }

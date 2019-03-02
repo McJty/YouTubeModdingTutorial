@@ -1,117 +1,45 @@
 package mcjty.mymod.worldgen;
 
 import mcjty.mymod.ModBlocks;
-import mcjty.mymod.MyMod;
 import mcjty.mymod.config.OregenConfig;
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraftforge.event.world.ChunkDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.IWorldGenerator;
-import org.apache.logging.log4j.Level;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.MinableConfig;
+import net.minecraft.world.gen.placement.CountRange;
+import net.minecraft.world.gen.placement.CountRangeConfig;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayDeque;
-import java.util.Random;
+import java.util.function.Predicate;
 
-public class OreGenerator implements IWorldGenerator {
+public class OreGenerator {
 
-    public static final String RETRO_NAME = "MyModOreGen";
-    public static OreGenerator instance = new OreGenerator();
+    private static final Predicate<IBlockState> IS_NETHERACK = state -> state.getBlock() == Blocks.NETHERRACK;
+    private static final Predicate<IBlockState> IS_ENDSTONE = state -> state.getBlock() == Blocks.END_STONE;
 
-    @Override
-    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-        generateWorld(random, chunkX, chunkZ, world, true);
-    }
+    public static void setupOregen() {
+        for (Biome biome : ForgeRegistries.BIOMES) {
 
-    public void generateWorld(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
-        if (!newGen && !OregenConfig.RETROGEN.get()) {
-            return;
-        }
+            CountRangeConfig placementConfig = new CountRangeConfig(OregenConfig.CHANCES_TO_SPAWN.get(), OregenConfig.MIN_Y.get(), OregenConfig.MIN_Y.get(), OregenConfig.MAX_Y.get());
 
-        if (world.getDimension().getType() == DimensionType.OVERWORLD) {
-            if (OregenConfig.GENERATE_OVERWORLD.get()) {
-                addOreSpawn(ModBlocks.blockFancyOreOverworld, (byte) OreType.ORE_OVERWORLD.ordinal(), Blocks.STONE, world, random, chunkX * 16, chunkZ * 16,
-                        OregenConfig.MIN_VEIN_SIZE.get(), OregenConfig.MAX_VEIN_SIZE.get(), OregenConfig.CHANCES_TO_SPAWN.get(), OregenConfig.MIN_Y.get(), OregenConfig.MAX_Y.get());
-            }
-        } else if (world.getDimension().getType() == DimensionType.NETHER) {
-            if (OregenConfig.GENERATE_NETHER.get()) {
-                addOreSpawn(ModBlocks.blockFancyOreNether, (byte) OreType.ORE_NETHER.ordinal(), Blocks.NETHERRACK, world, random, chunkX * 16, chunkZ * 16,
-                        OregenConfig.MIN_VEIN_SIZE.get(), OregenConfig.MAX_VEIN_SIZE.get(), OregenConfig.CHANCES_TO_SPAWN.get(), OregenConfig.MIN_Y.get(), OregenConfig.MAX_Y.get());
-            }
-        } else if (world.getDimension().getType() == DimensionType.THE_END) {
-            if (OregenConfig.GENERATE_END.get()) {
-                addOreSpawn(ModBlocks.blockFancyOreEnd, (byte) OreType.ORE_END.ordinal(), Blocks.END_STONE, world, random, chunkX * 16, chunkZ * 16,
-                        OregenConfig.MIN_VEIN_SIZE.get(), OregenConfig.MAX_VEIN_SIZE.get(), OregenConfig.CHANCES_TO_SPAWN.get(), OregenConfig.MIN_Y.get(), OregenConfig.MAX_Y.get());
-            }
-        }
-
-        if (!newGen) {
-            world.getChunk(chunkX, chunkZ).markDirty();
+            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+                    new DimensionCompositeFeature<>(Feature.MINABLE,
+                            new MinableConfig(MinableConfig.IS_ROCK, ModBlocks.blockFancyOreOverworld.getDefaultState(), OregenConfig.MAX_VEIN_SIZE.get()), new CountRange(),
+                            placementConfig,
+                            DimensionType.OVERWORLD));
+            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+                    new DimensionCompositeFeature<>(Feature.MINABLE,
+                            new MinableConfig(IS_NETHERACK, ModBlocks.blockFancyOreNether.getDefaultState(), OregenConfig.MAX_VEIN_SIZE.get()), new CountRange(),
+                            placementConfig,
+                            DimensionType.NETHER));
+            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
+                    new DimensionCompositeFeature<>(Feature.MINABLE,
+                            new MinableConfig(IS_ENDSTONE, ModBlocks.blockFancyOreEnd.getDefaultState(), OregenConfig.MAX_VEIN_SIZE.get()), new CountRange(),
+                            placementConfig,
+                            DimensionType.THE_END));
         }
     }
-
-    public void addOreSpawn(Block block, byte blockMeta, Block targetBlock, World world, Random random, int blockXPos, int blockZPos, int minVeinSize, int maxVeinSize, int chancesToSpawn, int minY, int maxY) {
-        //@todo 1.13
-//        WorldGenMinable minable = new WorldGenMinable(block.getStateFromMeta(blockMeta), (minVeinSize + random.nextInt(maxVeinSize - minVeinSize + 1)), BlockMatcher.forBlock(targetBlock));
-//        for (int i = 0 ; i < chancesToSpawn ; i++) {
-//            int posX = blockXPos + random.nextInt(16);
-//            int posY = minY + random.nextInt(maxY - minY);
-//            int posZ = blockZPos + random.nextInt(16);
-//            minable.generate(world, random, new BlockPos(posX, posY, posZ));
-//        }
-    }
-
-    @SubscribeEvent
-    public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
-        NBTTagCompound genTag = event.getData().getCompound(RETRO_NAME);
-        if (!genTag.hasKey("generated")) {
-            // If we did not have this key then this is a new chunk and we will have proper ores generated.
-            // Otherwise we are saving a chunk for which ores are not yet generated.
-            genTag.setBoolean("generated", true);
-        }
-        event.getData().setTag(RETRO_NAME, genTag);
-    }
-
-    @SubscribeEvent
-    public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
-        int dim = event.getWorld().getDimension().getType().getId();
-
-        boolean regen = false;
-        NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(RETRO_NAME);
-        ChunkPos coord = event.getChunk().getPos();
-
-        if (tag != null) {
-            boolean generated = OregenConfig.RETROGEN .get()&& !tag.hasKey("generated");
-            if (generated) {
-                if (OregenConfig.VERBOSE.get()) {
-                    MyMod.logger.log(Level.DEBUG, "Queuing Retrogen for chunk: " + coord.toString() + ".");
-                }
-                regen = true;
-            }
-        } else {
-            regen = OregenConfig.RETROGEN.get();
-        }
-
-        if (regen) {
-            ArrayDeque<ChunkPos> chunks = WorldTickHandler.chunksToGen.get(dim);
-
-            if (chunks == null) {
-                WorldTickHandler.chunksToGen.put(dim, new ArrayDeque<>(128));
-                chunks = WorldTickHandler.chunksToGen.get(dim);
-            }
-            if (chunks != null) {
-                chunks.addLast(coord);
-                WorldTickHandler.chunksToGen.put(dim, chunks);
-            }
-        }
-    }
-
-
-
 }

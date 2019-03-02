@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "mymod:block/fancy_ore_overworld" }
+  }
+}

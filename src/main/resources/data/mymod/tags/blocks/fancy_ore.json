@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "mymod:fancy_ore_overworld",
+    "mymod:fancy_ore_nether",
+    "mymod:fancy_ore_end"
+  ]
+}
